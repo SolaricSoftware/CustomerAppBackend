@@ -5,7 +5,7 @@
 // | |_| | |_) | |  | |  __/ || (_| | |
 // |____/|_.__/|_|  |_|\___|\__\__,_|_|
 //
-// Auto-generated from CustomerApp on 2015-04-01 19:54:54Z.
+// Auto-generated from CustomerApp on 2015-04-02 11:31:15Z.
 // Please visit http://code.google.com/p/dblinq2007/ for more information.
 //
 namespace CustomerAppBackend.Data
@@ -66,11 +66,35 @@ namespace CustomerAppBackend.Data
             }
         }
 
+        public Table<AppCustomerItemFeatured> AppCustomerItemFeatured
+        {
+            get
+            {
+                return this.GetTable <AppCustomerItemFeatured>();
+            }
+        }
+
+        public Table<AppCustomerItemImage> AppCustomerItemImages
+        {
+            get
+            {
+                return this.GetTable <AppCustomerItemImage>();
+            }
+        }
+
         public Table<AppCustomerItemProperty> AppCustomerItemProperties
         {
             get
             {
                 return this.GetTable <AppCustomerItemProperty>();
+            }
+        }
+
+        public Table<AppCustomerItemSale> AppCustomerItemSales
+        {
+            get
+            {
+                return this.GetTable <AppCustomerItemSale>();
             }
         }
 
@@ -486,6 +510,12 @@ namespace CustomerAppBackend.Data
 
         private EntitySet<AppCustomerItemProperty> _appCustomerItemProperties;
 
+        private EntitySet<AppCustomerItemFeatured> _appCustomerItemFeatured;
+
+        private EntitySet<AppCustomerItemImage> _appCustomerItemImages;
+
+        private EntitySet<AppCustomerItemSale> _appCustomerItemSales;
+
         private EntityRef<AppCustomerLocation> _appCustomerLocation = new EntityRef<AppCustomerLocation>();
 
         #region Extensibility Method Declarations
@@ -528,6 +558,9 @@ namespace CustomerAppBackend.Data
         public AppCustomerItem()
         {
             _appCustomerItemProperties = new EntitySet<AppCustomerItemProperty>(new Action<AppCustomerItemProperty>(this.AppCustomerItemProperties_Attach), new Action<AppCustomerItemProperty>(this.AppCustomerItemProperties_Detach));
+            _appCustomerItemFeatured = new EntitySet<AppCustomerItemFeatured>(new Action<AppCustomerItemFeatured>(this.AppCustomerItemFeatured_Attach), new Action<AppCustomerItemFeatured>(this.AppCustomerItemFeatured_Detach));
+            _appCustomerItemImages = new EntitySet<AppCustomerItemImage>(new Action<AppCustomerItemImage>(this.AppCustomerItemImages_Attach), new Action<AppCustomerItemImage>(this.AppCustomerItemImages_Detach));
+            _appCustomerItemSales = new EntitySet<AppCustomerItemSale>(new Action<AppCustomerItemSale>(this.AppCustomerItemSales_Attach), new Action<AppCustomerItemSale>(this.AppCustomerItemSales_Detach));
             this.OnCreated();
         }
 
@@ -713,6 +746,48 @@ namespace CustomerAppBackend.Data
                 this._appCustomerItemProperties = value;
             }
         }
+
+        [Association(Storage="_appCustomerItemFeatured", OtherKey="ItemID", ThisKey="ID", Name="FK__AppCustom__ItemI__09A971A2")]
+        [DebuggerNonUserCode()]
+        public EntitySet<AppCustomerItemFeatured> AppCustomerItemFeatured
+        {
+            get
+            {
+                return this._appCustomerItemFeatured;
+            }
+            set
+            {
+                this._appCustomerItemFeatured = value;
+            }
+        }
+
+        [Association(Storage="_appCustomerItemImages", OtherKey="ItemID", ThisKey="ID", Name="FK__AppCustom__ItemI__787EE5A0")]
+        [DebuggerNonUserCode()]
+        public EntitySet<AppCustomerItemImage> AppCustomerItemImages
+        {
+            get
+            {
+                return this._appCustomerItemImages;
+            }
+            set
+            {
+                this._appCustomerItemImages = value;
+            }
+        }
+
+        [Association(Storage="_appCustomerItemSales", OtherKey="ItemID", ThisKey="ID", Name="FK__AppCustom__ItemI__7F2BE32F")]
+        [DebuggerNonUserCode()]
+        public EntitySet<AppCustomerItemSale> AppCustomerItemSales
+        {
+            get
+            {
+                return this._appCustomerItemSales;
+            }
+            set
+            {
+                this._appCustomerItemSales = value;
+            }
+        }
         #endregion
 
         #region Parents
@@ -783,7 +858,463 @@ namespace CustomerAppBackend.Data
             this.SendPropertyChanging();
             entity.AppCustomerItem = null;
         }
+
+        private void AppCustomerItemFeatured_Attach(AppCustomerItemFeatured entity)
+        {
+            this.SendPropertyChanging();
+            entity.AppCustomerItem = this;
+        }
+
+        private void AppCustomerItemFeatured_Detach(AppCustomerItemFeatured entity)
+        {
+            this.SendPropertyChanging();
+            entity.AppCustomerItem = null;
+        }
+
+        private void AppCustomerItemImages_Attach(AppCustomerItemImage entity)
+        {
+            this.SendPropertyChanging();
+            entity.AppCustomerItem = this;
+        }
+
+        private void AppCustomerItemImages_Detach(AppCustomerItemImage entity)
+        {
+            this.SendPropertyChanging();
+            entity.AppCustomerItem = null;
+        }
+
+        private void AppCustomerItemSales_Attach(AppCustomerItemSale entity)
+        {
+            this.SendPropertyChanging();
+            entity.AppCustomerItem = this;
+        }
+
+        private void AppCustomerItemSales_Detach(AppCustomerItemSale entity)
+        {
+            this.SendPropertyChanging();
+            entity.AppCustomerItem = null;
+        }
         #endregion
+    }
+
+    [Table(Name="CustomerAppUser.AppCustomerItemFeatured")]
+    public partial class AppCustomerItemFeatured : System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+    {
+
+        private static System.ComponentModel.PropertyChangingEventArgs emptyChangingEventArgs = new System.ComponentModel.PropertyChangingEventArgs("");
+
+        private System.DateTime _effectiveDate;
+
+        private System.DateTime _expireDate;
+
+        private int _id;
+
+        private int _itemID;
+
+        private EntityRef<AppCustomerItem> _appCustomerItem = new EntityRef<AppCustomerItem>();
+
+        #region Extensibility Method Declarations
+        partial void OnCreated();
+
+        partial void OnEffectiveDateChanged();
+
+        partial void OnEffectiveDateChanging(System.DateTime value);
+
+        partial void OnExpireDateChanged();
+
+        partial void OnExpireDateChanging(System.DateTime value);
+
+        partial void OnIDChanged();
+
+        partial void OnIDChanging(int value);
+
+        partial void OnItemIDChanged();
+
+        partial void OnItemIDChanging(int value);
+        #endregion
+
+
+        public AppCustomerItemFeatured()
+        {
+            this.OnCreated();
+        }
+
+        [Column(Storage="_effectiveDate", Name="EffectiveDate", DbType="datetime", AutoSync=AutoSync.Never, CanBeNull=false)]
+        [DebuggerNonUserCode()]
+        public System.DateTime EffectiveDate
+        {
+            get
+            {
+                return this._effectiveDate;
+            }
+            set
+            {
+                if ((_effectiveDate != value))
+                {
+                    this.OnEffectiveDateChanging(value);
+                    this.SendPropertyChanging();
+                    this._effectiveDate = value;
+                    this.SendPropertyChanged("EffectiveDate");
+                    this.OnEffectiveDateChanged();
+                }
+            }
+        }
+
+        [Column(Storage="_expireDate", Name="ExpireDate", DbType="datetime", AutoSync=AutoSync.Never, CanBeNull=false)]
+        [DebuggerNonUserCode()]
+        public System.DateTime ExpireDate
+        {
+            get
+            {
+                return this._expireDate;
+            }
+            set
+            {
+                if ((_expireDate != value))
+                {
+                    this.OnExpireDateChanging(value);
+                    this.SendPropertyChanging();
+                    this._expireDate = value;
+                    this.SendPropertyChanged("ExpireDate");
+                    this.OnExpireDateChanged();
+                }
+            }
+        }
+
+        [Column(Storage="_id", Name="Id", DbType="int", IsPrimaryKey=true, IsDbGenerated=true, AutoSync=AutoSync.Never, CanBeNull=false)]
+        [DebuggerNonUserCode()]
+        public int ID
+        {
+            get
+            {
+                return this._id;
+            }
+            set
+            {
+                if ((_id != value))
+                {
+                    this.OnIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._id = value;
+                    this.SendPropertyChanged("ID");
+                    this.OnIDChanged();
+                }
+            }
+        }
+
+        [Column(Storage="_itemID", Name="ItemId", DbType="int", AutoSync=AutoSync.Never, CanBeNull=false)]
+        [DebuggerNonUserCode()]
+        public int ItemID
+        {
+            get
+            {
+                return this._itemID;
+            }
+            set
+            {
+                if ((_itemID != value))
+                {
+                    this.OnItemIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._itemID = value;
+                    this.SendPropertyChanged("ItemID");
+                    this.OnItemIDChanged();
+                }
+            }
+        }
+
+        #region Parents
+        [Association(Storage="_appCustomerItem", OtherKey="ID", ThisKey="ItemID", Name="FK__AppCustom__ItemI__09A971A2", IsForeignKey=true)]
+        [DebuggerNonUserCode()]
+        public AppCustomerItem AppCustomerItem
+        {
+            get
+            {
+                return this._appCustomerItem.Entity;
+            }
+            set
+            {
+                if (((this._appCustomerItem.Entity == value) == false))
+                {
+                    if ((this._appCustomerItem.Entity != null))
+                    {
+                        AppCustomerItem previousAppCustomerItem = this._appCustomerItem.Entity;
+                        this._appCustomerItem.Entity = null;
+                        previousAppCustomerItem.AppCustomerItemFeatured.Remove(this);
+                    }
+                    this._appCustomerItem.Entity = value;
+                    if ((value != null))
+                    {
+                        value.AppCustomerItemFeatured.Add(this);
+                        _itemID = value.ID;
+                    }
+                    else
+                    {
+                        _itemID = default(int);
+                    }
+                }
+            }
+        }
+        #endregion
+
+        public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void SendPropertyChanging()
+        {
+            System.ComponentModel.PropertyChangingEventHandler h = this.PropertyChanging;
+            if ((h != null))
+            {
+                h(this, emptyChangingEventArgs);
+            }
+        }
+
+        protected virtual void SendPropertyChanged(string propertyName)
+        {
+            System.ComponentModel.PropertyChangedEventHandler h = this.PropertyChanged;
+            if ((h != null))
+            {
+                h(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+
+    [Table(Name="CustomerAppUser.AppCustomerItemImage")]
+    public partial class AppCustomerItemImage : System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+    {
+
+        private static System.ComponentModel.PropertyChangingEventArgs emptyChangingEventArgs = new System.ComponentModel.PropertyChangingEventArgs("");
+
+        private sbyte _displayOrder;
+
+        private string _fileLocation;
+
+        private int _id;
+
+        private int _itemID;
+
+        private bool _primary;
+
+        private string _url;
+
+        private EntityRef<AppCustomerItem> _appCustomerItem = new EntityRef<AppCustomerItem>();
+
+        #region Extensibility Method Declarations
+        partial void OnCreated();
+
+        partial void OnDisplayOrderChanged();
+
+        partial void OnDisplayOrderChanging(sbyte value);
+
+        partial void OnFileLocationChanged();
+
+        partial void OnFileLocationChanging(string value);
+
+        partial void OnIDChanged();
+
+        partial void OnIDChanging(int value);
+
+        partial void OnItemIDChanged();
+
+        partial void OnItemIDChanging(int value);
+
+        partial void OnPrimaryChanged();
+
+        partial void OnPrimaryChanging(bool value);
+
+        partial void OnUrlChanged();
+
+        partial void OnUrlChanging(string value);
+        #endregion
+
+
+        public AppCustomerItemImage()
+        {
+            this.OnCreated();
+        }
+
+        [Column(Storage="_displayOrder", Name="DisplayOrder", DbType="tinyint", AutoSync=AutoSync.Never, CanBeNull=false)]
+        [DebuggerNonUserCode()]
+        public sbyte DisplayOrder
+        {
+            get
+            {
+                return this._displayOrder;
+            }
+            set
+            {
+                if ((_displayOrder != value))
+                {
+                    this.OnDisplayOrderChanging(value);
+                    this.SendPropertyChanging();
+                    this._displayOrder = value;
+                    this.SendPropertyChanged("DisplayOrder");
+                    this.OnDisplayOrderChanged();
+                }
+            }
+        }
+
+        [Column(Storage="_fileLocation", Name="FileLocation", DbType="nvarchar", AutoSync=AutoSync.Never, CanBeNull=false)]
+        [DebuggerNonUserCode()]
+        public string FileLocation
+        {
+            get
+            {
+                return this._fileLocation;
+            }
+            set
+            {
+                if (((_fileLocation == value) == false))
+                {
+                    this.OnFileLocationChanging(value);
+                    this.SendPropertyChanging();
+                    this._fileLocation = value;
+                    this.SendPropertyChanged("FileLocation");
+                    this.OnFileLocationChanged();
+                }
+            }
+        }
+
+        [Column(Storage="_id", Name="Id", DbType="int", IsPrimaryKey=true, IsDbGenerated=true, AutoSync=AutoSync.Never, CanBeNull=false)]
+        [DebuggerNonUserCode()]
+        public int ID
+        {
+            get
+            {
+                return this._id;
+            }
+            set
+            {
+                if ((_id != value))
+                {
+                    this.OnIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._id = value;
+                    this.SendPropertyChanged("ID");
+                    this.OnIDChanged();
+                }
+            }
+        }
+
+        [Column(Storage="_itemID", Name="ItemId", DbType="int", AutoSync=AutoSync.Never, CanBeNull=false)]
+        [DebuggerNonUserCode()]
+        public int ItemID
+        {
+            get
+            {
+                return this._itemID;
+            }
+            set
+            {
+                if ((_itemID != value))
+                {
+                    this.OnItemIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._itemID = value;
+                    this.SendPropertyChanged("ItemID");
+                    this.OnItemIDChanged();
+                }
+            }
+        }
+
+        [Column(Storage="_primary", Name="Primary", DbType="bit", AutoSync=AutoSync.Never, CanBeNull=false)]
+        [DebuggerNonUserCode()]
+        public bool Primary
+        {
+            get
+            {
+                return this._primary;
+            }
+            set
+            {
+                if ((_primary != value))
+                {
+                    this.OnPrimaryChanging(value);
+                    this.SendPropertyChanging();
+                    this._primary = value;
+                    this.SendPropertyChanged("Primary");
+                    this.OnPrimaryChanged();
+                }
+            }
+        }
+
+        [Column(Storage="_url", Name="Url", DbType="nvarchar", AutoSync=AutoSync.Never, CanBeNull=false)]
+        [DebuggerNonUserCode()]
+        public string Url
+        {
+            get
+            {
+                return this._url;
+            }
+            set
+            {
+                if (((_url == value) == false))
+                {
+                    this.OnUrlChanging(value);
+                    this.SendPropertyChanging();
+                    this._url = value;
+                    this.SendPropertyChanged("Url");
+                    this.OnUrlChanged();
+                }
+            }
+        }
+
+        #region Parents
+        [Association(Storage="_appCustomerItem", OtherKey="ID", ThisKey="ItemID", Name="FK__AppCustom__ItemI__787EE5A0", IsForeignKey=true)]
+        [DebuggerNonUserCode()]
+        public AppCustomerItem AppCustomerItem
+        {
+            get
+            {
+                return this._appCustomerItem.Entity;
+            }
+            set
+            {
+                if (((this._appCustomerItem.Entity == value) == false))
+                {
+                    if ((this._appCustomerItem.Entity != null))
+                    {
+                        AppCustomerItem previousAppCustomerItem = this._appCustomerItem.Entity;
+                        this._appCustomerItem.Entity = null;
+                        previousAppCustomerItem.AppCustomerItemImages.Remove(this);
+                    }
+                    this._appCustomerItem.Entity = value;
+                    if ((value != null))
+                    {
+                        value.AppCustomerItemImages.Add(this);
+                        _itemID = value.ID;
+                    }
+                    else
+                    {
+                        _itemID = default(int);
+                    }
+                }
+            }
+        }
+        #endregion
+
+        public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void SendPropertyChanging()
+        {
+            System.ComponentModel.PropertyChangingEventHandler h = this.PropertyChanging;
+            if ((h != null))
+            {
+                h(this, emptyChangingEventArgs);
+            }
+        }
+
+        protected virtual void SendPropertyChanged(string propertyName)
+        {
+            System.ComponentModel.PropertyChangedEventHandler h = this.PropertyChanged;
+            if ((h != null))
+            {
+                h(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
 
     [Table(Name="CustomerAppUser.AppCustomerItemProperty")]
@@ -940,6 +1471,216 @@ namespace CustomerAppBackend.Data
                     else
                     {
                         _appCustomerItemID = default(int);
+                    }
+                }
+            }
+        }
+        #endregion
+
+        public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void SendPropertyChanging()
+        {
+            System.ComponentModel.PropertyChangingEventHandler h = this.PropertyChanging;
+            if ((h != null))
+            {
+                h(this, emptyChangingEventArgs);
+            }
+        }
+
+        protected virtual void SendPropertyChanged(string propertyName)
+        {
+            System.ComponentModel.PropertyChangedEventHandler h = this.PropertyChanged;
+            if ((h != null))
+            {
+                h(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+
+    [Table(Name="CustomerAppUser.AppCustomerItemSale")]
+    public partial class AppCustomerItemSale : System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+    {
+
+        private static System.ComponentModel.PropertyChangingEventArgs emptyChangingEventArgs = new System.ComponentModel.PropertyChangingEventArgs("");
+
+        private System.DateTime _effectiveDate;
+
+        private System.DateTime _expireDate;
+
+        private int _id;
+
+        private int _itemID;
+
+        private decimal _price;
+
+        private EntityRef<AppCustomerItem> _appCustomerItem = new EntityRef<AppCustomerItem>();
+
+        #region Extensibility Method Declarations
+        partial void OnCreated();
+
+        partial void OnEffectiveDateChanged();
+
+        partial void OnEffectiveDateChanging(System.DateTime value);
+
+        partial void OnExpireDateChanged();
+
+        partial void OnExpireDateChanging(System.DateTime value);
+
+        partial void OnIDChanged();
+
+        partial void OnIDChanging(int value);
+
+        partial void OnItemIDChanged();
+
+        partial void OnItemIDChanging(int value);
+
+        partial void OnPriceChanged();
+
+        partial void OnPriceChanging(decimal value);
+        #endregion
+
+
+        public AppCustomerItemSale()
+        {
+            this.OnCreated();
+        }
+
+        [Column(Storage="_effectiveDate", Name="EffectiveDate", DbType="datetime", AutoSync=AutoSync.Never, CanBeNull=false)]
+        [DebuggerNonUserCode()]
+        public System.DateTime EffectiveDate
+        {
+            get
+            {
+                return this._effectiveDate;
+            }
+            set
+            {
+                if ((_effectiveDate != value))
+                {
+                    this.OnEffectiveDateChanging(value);
+                    this.SendPropertyChanging();
+                    this._effectiveDate = value;
+                    this.SendPropertyChanged("EffectiveDate");
+                    this.OnEffectiveDateChanged();
+                }
+            }
+        }
+
+        [Column(Storage="_expireDate", Name="ExpireDate", DbType="datetime", AutoSync=AutoSync.Never, CanBeNull=false)]
+        [DebuggerNonUserCode()]
+        public System.DateTime ExpireDate
+        {
+            get
+            {
+                return this._expireDate;
+            }
+            set
+            {
+                if ((_expireDate != value))
+                {
+                    this.OnExpireDateChanging(value);
+                    this.SendPropertyChanging();
+                    this._expireDate = value;
+                    this.SendPropertyChanged("ExpireDate");
+                    this.OnExpireDateChanged();
+                }
+            }
+        }
+
+        [Column(Storage="_id", Name="Id", DbType="int", IsPrimaryKey=true, IsDbGenerated=true, AutoSync=AutoSync.Never, CanBeNull=false)]
+        [DebuggerNonUserCode()]
+        public int ID
+        {
+            get
+            {
+                return this._id;
+            }
+            set
+            {
+                if ((_id != value))
+                {
+                    this.OnIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._id = value;
+                    this.SendPropertyChanged("ID");
+                    this.OnIDChanged();
+                }
+            }
+        }
+
+        [Column(Storage="_itemID", Name="ItemId", DbType="int", AutoSync=AutoSync.Never, CanBeNull=false)]
+        [DebuggerNonUserCode()]
+        public int ItemID
+        {
+            get
+            {
+                return this._itemID;
+            }
+            set
+            {
+                if ((_itemID != value))
+                {
+                    this.OnItemIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._itemID = value;
+                    this.SendPropertyChanged("ItemID");
+                    this.OnItemIDChanged();
+                }
+            }
+        }
+
+        [Column(Storage="_price", Name="Price", DbType="decimal", AutoSync=AutoSync.Never, CanBeNull=false)]
+        [DebuggerNonUserCode()]
+        public decimal Price
+        {
+            get
+            {
+                return this._price;
+            }
+            set
+            {
+                if ((_price != value))
+                {
+                    this.OnPriceChanging(value);
+                    this.SendPropertyChanging();
+                    this._price = value;
+                    this.SendPropertyChanged("Price");
+                    this.OnPriceChanged();
+                }
+            }
+        }
+
+        #region Parents
+        [Association(Storage="_appCustomerItem", OtherKey="ID", ThisKey="ItemID", Name="FK__AppCustom__ItemI__7F2BE32F", IsForeignKey=true)]
+        [DebuggerNonUserCode()]
+        public AppCustomerItem AppCustomerItem
+        {
+            get
+            {
+                return this._appCustomerItem.Entity;
+            }
+            set
+            {
+                if (((this._appCustomerItem.Entity == value) == false))
+                {
+                    if ((this._appCustomerItem.Entity != null))
+                    {
+                        AppCustomerItem previousAppCustomerItem = this._appCustomerItem.Entity;
+                        this._appCustomerItem.Entity = null;
+                        previousAppCustomerItem.AppCustomerItemSales.Remove(this);
+                    }
+                    this._appCustomerItem.Entity = value;
+                    if ((value != null))
+                    {
+                        value.AppCustomerItemSales.Add(this);
+                        _itemID = value.ID;
+                    }
+                    else
+                    {
+                        _itemID = default(int);
                     }
                 }
             }
