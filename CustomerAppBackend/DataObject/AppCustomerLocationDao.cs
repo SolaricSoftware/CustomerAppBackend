@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace CustomerAppBackend.DataObject
 {
-	public class AppCustomerDao
-	{
-		public AppCustomerDao ()
-		{
-            this.Locations = new List<AppCustomerLocationDao>();
-		}
+    public class AppCustomerLocationDao
+    {
+        public AppCustomerLocationDao()
+        {
+        }
 
         public int Id
         {
@@ -16,15 +14,15 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-		public string Name {
-			get;
-			set;
-		}
+        public string Name {
+            get;
+            set;
+        }
 
-		public string Address1 {
-			get;
-			set;
-		}
+        public string Address1 {
+            get;
+            set;
+        }
 
         public string Address2
         {
@@ -56,7 +54,7 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public Guid AccessKey
+        public int AppCustomerId
         {
             get;
             set;
@@ -67,12 +65,6 @@ namespace CustomerAppBackend.DataObject
             get;
             set;
         }
-
-        public List<AppCustomerLocationDao> Locations
-        {
-            get;
-            set;
-        }
-	}
+    }
 }
 

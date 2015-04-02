@@ -14,19 +14,14 @@ namespace CustomerAppBackend.Controllers
 	{
 		public ActionResult Index ()
 		{
-			return Json ("");
+			return Json ("Index");
 		}
 
 		public JsonResult GetCustomers() {
 			var customers = new List<AppCustomerDao> ();
 			var da = new DataAccess ();
 
-			customers.AddRange (da.AppCustomer.Select (ac => new AppCustomerDao {
-				Name = ac.Name,
-				Address1 = ac.Address1
-			}));
-
-			return Json (customers, JsonRequestBehavior.AllowGet);
+			return Json ("", JsonRequestBehavior.AllowGet);
 		}
 	}
 }

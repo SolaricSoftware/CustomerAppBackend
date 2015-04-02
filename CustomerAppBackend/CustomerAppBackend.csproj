@@ -80,6 +80,9 @@
     <Compile Include="Data\DataAccess.cs" />
     <Compile Include="Data\DataAccessPartial.cs" />
     <Compile Include="DataObject\AppCustomerDao.cs" />
+    <Compile Include="DataObject\AppCustomerLocationDao.cs" />
+    <Compile Include="DataObject\AppCustomerItemDao.cs" />
+    <Compile Include="DataObject\Extentions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />
