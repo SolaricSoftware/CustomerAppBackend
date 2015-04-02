@@ -75,6 +75,78 @@ namespace CustomerAppBackend.Data
             }
             return retval;
         }
+
+        public static AppCustomerItemImageDao ToDao(this AppCustomerItemImage item)
+        {
+            var dao = new AppCustomerItemImageDao
+            {
+                    Id = item.ID,
+                    ItemId = item.ItemID,
+                    FileLocation = item.FileLocation,
+                    Url = item.Url,
+                    Primary = item.Primary,
+                    DisplayOrder = item.DisplayOrder
+            };
+
+            return dao;
+        }
+
+        public static List<AppCustomerItemImageDao> ToDao(this IEnumerable<AppCustomerItemImage> items)
+        {
+            var daos = new List<AppCustomerItemImageDao>();
+            foreach (var item in items)
+            {
+                daos.Add(item.ToDao());
+            }
+            return daos;
+        }
+
+        public static AppCustomerItemSaleDao ToDao(this AppCustomerItemSale item)
+        {
+            var dao = new AppCustomerItemSaleDao
+            {
+                    Id = item.ID,
+                    ItemId = item.ItemID,
+                    Price = item.Price,
+                    EffectiveDate = item.EffectiveDate,
+                    ExpireDate = item.ExpireDate
+            };
+
+            return dao;
+        }
+
+        public static List<AppCustomerItemSaleDao> ToDao(this IEnumerable<AppCustomerItemSale> items)
+        {
+            var daos = new List<AppCustomerItemSaleDao>();
+            foreach (var item in items)
+            {
+                daos.Add(item.ToDao());
+            }
+            return daos;
+        }
+
+        public static AppCustomerItemFeaturedDao ToDao(this AppCustomerItemFeaturedDao item)
+        {
+            var dao = new AppCustomerItemFeaturedDao
+                {
+                    Id = item.Id,
+                    ItemId = item.ItemId,
+                    EffectiveDate = item.EffectiveDate,
+                    ExpireDate = item.ExpireDate
+                };
+
+            return dao;
+        }
+
+        public static List<AppCustomerItemFeaturedDao> ToDao(this IEnumerable<AppCustomerItemFeaturedDao> items)
+        {
+            var daos = new List<AppCustomerItemFeaturedDao>();
+            foreach (var item in items)
+            {
+                daos.Add(item.ToDao());
+            }
+            return daos;
+        }
     }
 }
 

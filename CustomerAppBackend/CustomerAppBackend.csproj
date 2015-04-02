@@ -85,7 +85,7 @@
     <Compile Include="DataObject\Extentions.cs" />
     <Compile Include="DataObject\AppCustomerItemImageDao.cs" />
     <Compile Include="DataObject\AppCustomerItemSaleDao.cs" />
-    <Compile Include="DataObject\AppCustomerItemFeatured.cs" />
+    <Compile Include="DataObject\AppCustomerItemFeaturedDao.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />

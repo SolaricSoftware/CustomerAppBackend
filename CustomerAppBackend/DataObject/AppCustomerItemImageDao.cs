@@ -38,7 +38,7 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public short DisplayOrder
+        public sbyte DisplayOrder
         {
             get;
             set;

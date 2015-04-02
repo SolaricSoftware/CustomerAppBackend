@@ -2,9 +2,9 @@
 
 namespace CustomerAppBackend.DataObject
 {
-    public class AppCustomerItemFeatured
+    public class AppCustomerItemFeaturedDao
     {
-        public AppCustomerItemFeatured()
+        public AppCustomerItemFeaturedDao()
         {
         }
 
