@@ -134,6 +134,7 @@ namespace CustomerAppBackend.Data
                     ItemId = item.ItemID,
                     FileLocation = item.FileLocation,
                     Url = item.Url,
+                    ThumbnailUrl = item.ThumbnailUrl,
                     Primary = item.Primary,
                     DisplayOrder = item.DisplayOrder
             };

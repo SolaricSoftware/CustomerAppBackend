@@ -32,6 +32,12 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
+        public string ThumbnailUrl
+        {
+            get;
+            set;
+        }
+
         public bool Primary
         {
             get;

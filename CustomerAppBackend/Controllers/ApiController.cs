@@ -39,6 +39,28 @@ namespace CustomerAppBackend.Controllers
             return Json(retval, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetCustomer()
+        {
+            var retval = new DataWrapper<AppCustomerDao>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            Guid accessKey;
+            if (Guid.TryParse(Request["accessKey"], out accessKey))
+            {
+                var db = new DataAccess();
+                retval.Data = db.AppCustomers.FirstOrDefault(x => x.Active == true && x.AccessKey == accessKey).ToDao(true);
+            }
+            else
+            {
+                retval.Error = "Access Key is missing or invalid.";
+            }
+
+            return Json(retval, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetLocations()
         {
             var retval = new DataWrapper<List<AppCustomerLocationDao>>()
@@ -51,7 +73,6 @@ namespace CustomerAppBackend.Controllers
             if (Guid.TryParse(Request["accessKey"], out accessKey))
             {
                 var db = new DataAccess();
-
                 retval.Data = db.AppCustomerLocations.Where(x => 
                                 x.AppCustomer.AccessKey == accessKey &&
                                 x.AppCustomer.Active == true &&
@@ -80,7 +101,6 @@ namespace CustomerAppBackend.Controllers
                 Int32.TryParse(Request["locationId"], out locationId);
 
                 var db = new DataAccess();
-
                 retval.Data = db.AppCustomerItems.Where(x => 
                     x.Active == true &&
                     x.AppCustomerLocation.Active == true &&
@@ -111,7 +131,6 @@ namespace CustomerAppBackend.Controllers
                 Int32.TryParse(Request["locationId"], out locationId);
 
                 var db = new DataAccess();
-
                 retval.Data = db.AppCustomerItemSales.Where(x => 
                     x.AppCustomerItem.Active == true &&
                     x.AppCustomerItem.AppCustomerLocation.Active == true &&
@@ -142,7 +161,6 @@ namespace CustomerAppBackend.Controllers
                 Int32.TryParse(Request["locationId"], out locationId);
 
                 var db = new DataAccess();
-
                 retval.Data = db.AppCustomerItemFeatured.Where(x => 
                     x.AppCustomerItem.Active == true &&
                     x.AppCustomerItem.AppCustomerLocation.Active == true &&

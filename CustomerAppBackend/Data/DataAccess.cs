@@ -5,7 +5,7 @@
 // | |_| | |_) | |  | |  __/ || (_| | |
 // |____/|_.__/|_|  |_|\___|\__\__,_|_|
 //
-// Auto-generated from CustomerApp on 2015-04-02 11:31:15Z.
+// Auto-generated from CustomerApp on 2015-04-02 17:34:34Z.
 // Please visit http://code.google.com/p/dblinq2007/ for more information.
 //
 namespace CustomerAppBackend.Data
@@ -761,7 +761,7 @@ namespace CustomerAppBackend.Data
             }
         }
 
-        [Association(Storage="_appCustomerItemImages", OtherKey="ItemID", ThisKey="ID", Name="FK__AppCustom__ItemI__787EE5A0")]
+        [Association(Storage="_appCustomerItemImages", OtherKey="ItemID", ThisKey="ID", Name="FK__AppCustom__ItemI__10566F31")]
         [DebuggerNonUserCode()]
         public EntitySet<AppCustomerItemImage> AppCustomerItemImages
         {
@@ -1096,6 +1096,8 @@ namespace CustomerAppBackend.Data
 
         private bool _primary;
 
+        private string _thumbnailUrl;
+
         private string _url;
 
         private EntityRef<AppCustomerItem> _appCustomerItem = new EntityRef<AppCustomerItem>();
@@ -1122,6 +1124,10 @@ namespace CustomerAppBackend.Data
         partial void OnPrimaryChanged();
 
         partial void OnPrimaryChanging(bool value);
+
+        partial void OnThumbnailUrlChanged();
+
+        partial void OnThumbnailUrlChanging(string value);
 
         partial void OnUrlChanged();
 
@@ -1239,6 +1245,27 @@ namespace CustomerAppBackend.Data
             }
         }
 
+        [Column(Storage="_thumbnailUrl", Name="ThumbnailUrl", DbType="nvarchar", AutoSync=AutoSync.Never, CanBeNull=false)]
+        [DebuggerNonUserCode()]
+        public string ThumbnailUrl
+        {
+            get
+            {
+                return this._thumbnailUrl;
+            }
+            set
+            {
+                if (((_thumbnailUrl == value) == false))
+                {
+                    this.OnThumbnailUrlChanging(value);
+                    this.SendPropertyChanging();
+                    this._thumbnailUrl = value;
+                    this.SendPropertyChanged("ThumbnailUrl");
+                    this.OnThumbnailUrlChanged();
+                }
+            }
+        }
+
         [Column(Storage="_url", Name="Url", DbType="nvarchar", AutoSync=AutoSync.Never, CanBeNull=false)]
         [DebuggerNonUserCode()]
         public string Url
@@ -1261,7 +1288,7 @@ namespace CustomerAppBackend.Data
         }
 
         #region Parents
-        [Association(Storage="_appCustomerItem", OtherKey="ID", ThisKey="ItemID", Name="FK__AppCustom__ItemI__787EE5A0", IsForeignKey=true)]
+        [Association(Storage="_appCustomerItem", OtherKey="ID", ThisKey="ItemID", Name="FK__AppCustom__ItemI__10566F31", IsForeignKey=true)]
         [DebuggerNonUserCode()]
         public AppCustomerItem AppCustomerItem
         {
