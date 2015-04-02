@@ -31,6 +31,12 @@ namespace CustomerAppBackend.DataObject
             get;
             set;
         }
+
+        public AppCustomerItemDao Item
+        {
+            get;
+            set;
+        }
     }
 }
 

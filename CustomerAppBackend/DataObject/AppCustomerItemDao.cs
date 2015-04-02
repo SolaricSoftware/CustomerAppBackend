@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CustomerAppBackend.DataObject
 {
@@ -59,6 +60,24 @@ namespace CustomerAppBackend.DataObject
         public AppCustomerLocationDao Location
         {
             get;
+            set;
+        }
+
+        public List<AppCustomerItemImageDao> Images
+        {
+            get;
+            set;
+        }
+
+        public List<AppCustomerItemSaleDao> SaleItems
+        {
+            get;
+            set;
+        }
+
+        public List<AppCustomerItemFeaturedDao> FeaturedItems
+        {
+            get; 
             set;
         }
     }

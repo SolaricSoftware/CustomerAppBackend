@@ -16,13 +16,6 @@ namespace CustomerAppBackend.Controllers
 		{
 			return Json ("Index");
 		}
-
-		public JsonResult GetCustomers() {
-			var customers = new List<AppCustomerDao> ();
-			var da = new DataAccess ();
-
-			return Json ("", JsonRequestBehavior.AllowGet);
-		}
 	}
 }
 	

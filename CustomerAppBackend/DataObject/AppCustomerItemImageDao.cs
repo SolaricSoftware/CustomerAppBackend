@@ -43,6 +43,12 @@ namespace CustomerAppBackend.DataObject
             get;
             set;
         }
+
+        public AppCustomerLocationDao Location
+        {
+            get;
+            set;
+        }
     }
 }
 

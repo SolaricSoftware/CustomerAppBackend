@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CustomerAppBackend.DataObject
 {
-	public class AppCustomerDao
+    public class AppCustomerDao
 	{
 		public AppCustomerDao ()
 		{
