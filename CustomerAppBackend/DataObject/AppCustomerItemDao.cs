@@ -57,6 +57,18 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
+        public string Manufacturer
+        {
+            get;
+            set;
+        }
+
+        public string Model
+        {
+            get;
+            set;
+        }
+
         public AppCustomerLocationDao Location
         {
             get;
@@ -78,6 +90,18 @@ namespace CustomerAppBackend.DataObject
         public List<AppCustomerItemFeaturedDao> FeaturedItems
         {
             get; 
+            set;
+        }
+
+        public int AppCustomerItemCategoryId
+        {
+            get;
+            set;
+        }
+
+        public AppCustomerItemCategoryDao Category
+        {
+            get;
             set;
         }
     }

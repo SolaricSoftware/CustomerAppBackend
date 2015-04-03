@@ -126,6 +126,40 @@ namespace CustomerAppBackend.Data
             return daos;
         }
 
+        public static AppCustomerItemCategoryDao ToDao(this AppCustomerItemCategory item, bool loadItems = false)
+        {
+            var dao = new AppCustomerItemCategoryDao
+            {
+                Id = item.ID,
+                Name = item.Name,
+                Description = item.Description,
+                Active = item.Active
+            };
+
+            if (loadItems)
+            {
+                if (item.AppCustomerItems == null)
+                    item.AppCustomerItems.Load();
+
+                if (item.AppCustomerItems.Count > 0)
+                {
+                    dao.Items = item.AppCustomerItems.ToDao();
+                }
+            }
+
+            return dao;
+        }
+
+        public static List<AppCustomerItemCategoryDao> ToDao(this IEnumerable<AppCustomerItemCategory> items, bool loadItems = false)
+        {
+            var daos = new List<AppCustomerItemCategoryDao>();
+            foreach (var item in items)
+            {
+                daos.Add(item.ToDao(loadItems));
+            }
+            return daos;
+        }
+
         public static AppCustomerItemImageDao ToDao(this AppCustomerItemImage item)
         {
             var dao = new AppCustomerItemImageDao

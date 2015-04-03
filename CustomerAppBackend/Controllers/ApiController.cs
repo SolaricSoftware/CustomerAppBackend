@@ -1,9 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Net;
 using System.Web.Mvc;
-
+using System.Web.Script.Serialization;
 
 using CustomerAppBackend.Data;
 using CustomerAppBackend.DataObject;
@@ -174,6 +176,40 @@ namespace CustomerAppBackend.Controllers
             }
 
             return Json(retval, JsonRequestBehavior.AllowGet);
+        }
+
+        public void StoreTest()
+        {
+            var apiKey = "8037a4e7d88990e51606487d2faee5e8";
+            var password = "7460df937d2be2ce09c69b29ce3a19b9";
+            var storeName = "customerappteststore";
+            //var resource = "admin/products";
+            var resource = "admin";
+            var call = "customers";
+            var parms = "query= email:bob@solaricsoftware.com";
+
+            var url = String.Format("https://{0}.myshopify.com/{1}{2}{3}.json{4}", storeName, resource, !String.IsNullOrWhiteSpace(call) ? "/" : String.Empty, call, !String.IsNullOrWhiteSpace(parms) ? "?" + parms : String.Empty);
+            var uri = new Uri(url);
+            var request = WebRequest.Create(uri) as HttpWebRequest;
+            request.Method = "GET";
+            request.ContentType = "application/json";
+            request.Credentials = new NetworkCredential(apiKey, password);
+
+            try
+            {
+                var response = request.GetResponse() as HttpWebResponse;
+                var reader = new StreamReader(response.GetResponseStream());
+                var json = reader.ReadToEnd();
+                dynamic obj = (new JavaScriptSerializer()).DeserializeObject(json);
+                var b = 1 + 1;
+            }
+            catch(Exception ex)
+            {
+                var tmp = ex.Message;
+
+            }
+
+            var a = 1 + 1;
         }
     }
 }

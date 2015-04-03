@@ -5,7 +5,7 @@
 // | |_| | |_) | |  | |  __/ || (_| | |
 // |____/|_.__/|_|  |_|\___|\__\__,_|_|
 //
-// Auto-generated from CustomerApp on 2015-04-02 17:34:34Z.
+// Auto-generated from CustomerApp on 2015-04-03 11:41:09Z.
 // Please visit http://code.google.com/p/dblinq2007/ for more information.
 //
 namespace CustomerAppBackend.Data
@@ -63,6 +63,14 @@ namespace CustomerAppBackend.Data
             get
             {
                 return this.GetTable <AppCustomerItem>();
+            }
+        }
+
+        public Table<AppCustomerItemCategory> AppCustomerItemCategories
+        {
+            get
+            {
+                return this.GetTable <AppCustomerItemCategory>();
             }
         }
 
@@ -494,11 +502,17 @@ namespace CustomerAppBackend.Data
 
         private bool _active;
 
+        private int _appCustomerItemCategoryID;
+
         private int _appCustomerLocationID;
 
         private string _description;
 
         private int _id;
+
+        private string _manufacturer;
+
+        private string _model;
 
         private string _name;
 
@@ -516,6 +530,8 @@ namespace CustomerAppBackend.Data
 
         private EntitySet<AppCustomerItemSale> _appCustomerItemSales;
 
+        private EntityRef<AppCustomerItemCategory> _appCustomerItemCategory = new EntityRef<AppCustomerItemCategory>();
+
         private EntityRef<AppCustomerLocation> _appCustomerLocation = new EntityRef<AppCustomerLocation>();
 
         #region Extensibility Method Declarations
@@ -524,6 +540,10 @@ namespace CustomerAppBackend.Data
         partial void OnActiveChanged();
 
         partial void OnActiveChanging(bool value);
+
+        partial void OnAppCustomerItemCategoryIDChanged();
+
+        partial void OnAppCustomerItemCategoryIDChanging(int value);
 
         partial void OnAppCustomerLocationIDChanged();
 
@@ -536,6 +556,14 @@ namespace CustomerAppBackend.Data
         partial void OnIDChanged();
 
         partial void OnIDChanging(int value);
+
+        partial void OnManufacturerChanged();
+
+        partial void OnManufacturerChanging(string value);
+
+        partial void OnModelChanged();
+
+        partial void OnModelChanging(string value);
 
         partial void OnNameChanged();
 
@@ -581,6 +609,27 @@ namespace CustomerAppBackend.Data
                     this._active = value;
                     this.SendPropertyChanged("Active");
                     this.OnActiveChanged();
+                }
+            }
+        }
+
+        [Column(Storage="_appCustomerItemCategoryID", Name="AppCustomerItemCategoryId", DbType="int", AutoSync=AutoSync.Never, CanBeNull=false)]
+        [DebuggerNonUserCode()]
+        public int AppCustomerItemCategoryID
+        {
+            get
+            {
+                return this._appCustomerItemCategoryID;
+            }
+            set
+            {
+                if ((_appCustomerItemCategoryID != value))
+                {
+                    this.OnAppCustomerItemCategoryIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._appCustomerItemCategoryID = value;
+                    this.SendPropertyChanged("AppCustomerItemCategoryID");
+                    this.OnAppCustomerItemCategoryIDChanged();
                 }
             }
         }
@@ -644,6 +693,48 @@ namespace CustomerAppBackend.Data
                     this._id = value;
                     this.SendPropertyChanged("ID");
                     this.OnIDChanged();
+                }
+            }
+        }
+
+        [Column(Storage="_manufacturer", Name="Manufacturer", DbType="nvarchar", AutoSync=AutoSync.Never, CanBeNull=false)]
+        [DebuggerNonUserCode()]
+        public string Manufacturer
+        {
+            get
+            {
+                return this._manufacturer;
+            }
+            set
+            {
+                if (((_manufacturer == value) == false))
+                {
+                    this.OnManufacturerChanging(value);
+                    this.SendPropertyChanging();
+                    this._manufacturer = value;
+                    this.SendPropertyChanged("Manufacturer");
+                    this.OnManufacturerChanged();
+                }
+            }
+        }
+
+        [Column(Storage="_model", Name="Model", DbType="nvarchar", AutoSync=AutoSync.Never, CanBeNull=false)]
+        [DebuggerNonUserCode()]
+        public string Model
+        {
+            get
+            {
+                return this._model;
+            }
+            set
+            {
+                if (((_model == value) == false))
+                {
+                    this.OnModelChanging(value);
+                    this.SendPropertyChanging();
+                    this._model = value;
+                    this.SendPropertyChanged("Model");
+                    this.OnModelChanged();
                 }
             }
         }
@@ -791,6 +882,38 @@ namespace CustomerAppBackend.Data
         #endregion
 
         #region Parents
+        [Association(Storage="_appCustomerItemCategory", OtherKey="ID", ThisKey="AppCustomerItemCategoryID", Name="FK__AppCustom__AppCu__2645B050", IsForeignKey=true)]
+        [DebuggerNonUserCode()]
+        public AppCustomerItemCategory AppCustomerItemCategory
+        {
+            get
+            {
+                return this._appCustomerItemCategory.Entity;
+            }
+            set
+            {
+                if (((this._appCustomerItemCategory.Entity == value) == false))
+                {
+                    if ((this._appCustomerItemCategory.Entity != null))
+                    {
+                        AppCustomerItemCategory previousAppCustomerItemCategory = this._appCustomerItemCategory.Entity;
+                        this._appCustomerItemCategory.Entity = null;
+                        previousAppCustomerItemCategory.AppCustomerItems.Remove(this);
+                    }
+                    this._appCustomerItemCategory.Entity = value;
+                    if ((value != null))
+                    {
+                        value.AppCustomerItems.Add(this);
+                        _appCustomerItemCategoryID = value.ID;
+                    }
+                    else
+                    {
+                        _appCustomerItemCategoryID = default(int);
+                    }
+                }
+            }
+        }
+
         [Association(Storage="_appCustomerLocation", OtherKey="ID", ThisKey="AppCustomerLocationID", Name="FK__AppCustom__AppCu__6FE99F9F", IsForeignKey=true)]
         [DebuggerNonUserCode()]
         public AppCustomerLocation AppCustomerLocation
@@ -893,6 +1016,186 @@ namespace CustomerAppBackend.Data
         {
             this.SendPropertyChanging();
             entity.AppCustomerItem = null;
+        }
+        #endregion
+    }
+
+    [Table(Name="CustomerAppUser.AppCustomerItemCategory")]
+    public partial class AppCustomerItemCategory : System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+    {
+
+        private static System.ComponentModel.PropertyChangingEventArgs emptyChangingEventArgs = new System.ComponentModel.PropertyChangingEventArgs("");
+
+        private bool _active;
+
+        private string _description;
+
+        private int _id;
+
+        private string _name;
+
+        private EntitySet<AppCustomerItem> _appCustomerItems;
+
+        #region Extensibility Method Declarations
+        partial void OnCreated();
+
+        partial void OnActiveChanged();
+
+        partial void OnActiveChanging(bool value);
+
+        partial void OnDescriptionChanged();
+
+        partial void OnDescriptionChanging(string value);
+
+        partial void OnIDChanged();
+
+        partial void OnIDChanging(int value);
+
+        partial void OnNameChanged();
+
+        partial void OnNameChanging(string value);
+        #endregion
+
+
+        public AppCustomerItemCategory()
+        {
+            _appCustomerItems = new EntitySet<AppCustomerItem>(new Action<AppCustomerItem>(this.AppCustomerItems_Attach), new Action<AppCustomerItem>(this.AppCustomerItems_Detach));
+            this.OnCreated();
+        }
+
+        [Column(Storage="_active", Name="Active", DbType="bit", AutoSync=AutoSync.Never, CanBeNull=false)]
+        [DebuggerNonUserCode()]
+        public bool Active
+        {
+            get
+            {
+                return this._active;
+            }
+            set
+            {
+                if ((_active != value))
+                {
+                    this.OnActiveChanging(value);
+                    this.SendPropertyChanging();
+                    this._active = value;
+                    this.SendPropertyChanged("Active");
+                    this.OnActiveChanged();
+                }
+            }
+        }
+
+        [Column(Storage="_description", Name="Description", DbType="nvarchar", AutoSync=AutoSync.Never, CanBeNull=false)]
+        [DebuggerNonUserCode()]
+        public string Description
+        {
+            get
+            {
+                return this._description;
+            }
+            set
+            {
+                if (((_description == value) == false))
+                {
+                    this.OnDescriptionChanging(value);
+                    this.SendPropertyChanging();
+                    this._description = value;
+                    this.SendPropertyChanged("Description");
+                    this.OnDescriptionChanged();
+                }
+            }
+        }
+
+        [Column(Storage="_id", Name="Id", DbType="int", IsPrimaryKey=true, IsDbGenerated=true, AutoSync=AutoSync.Never, CanBeNull=false)]
+        [DebuggerNonUserCode()]
+        public int ID
+        {
+            get
+            {
+                return this._id;
+            }
+            set
+            {
+                if ((_id != value))
+                {
+                    this.OnIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._id = value;
+                    this.SendPropertyChanged("ID");
+                    this.OnIDChanged();
+                }
+            }
+        }
+
+        [Column(Storage="_name", Name="Name", DbType="nvarchar", AutoSync=AutoSync.Never, CanBeNull=false)]
+        [DebuggerNonUserCode()]
+        public string Name
+        {
+            get
+            {
+                return this._name;
+            }
+            set
+            {
+                if (((_name == value) == false))
+                {
+                    this.OnNameChanging(value);
+                    this.SendPropertyChanging();
+                    this._name = value;
+                    this.SendPropertyChanged("Name");
+                    this.OnNameChanged();
+                }
+            }
+        }
+
+        #region Children
+        [Association(Storage="_appCustomerItems", OtherKey="AppCustomerItemCategoryID", ThisKey="ID", Name="FK__AppCustom__AppCu__2645B050")]
+        [DebuggerNonUserCode()]
+        public EntitySet<AppCustomerItem> AppCustomerItems
+        {
+            get
+            {
+                return this._appCustomerItems;
+            }
+            set
+            {
+                this._appCustomerItems = value;
+            }
+        }
+        #endregion
+
+        public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void SendPropertyChanging()
+        {
+            System.ComponentModel.PropertyChangingEventHandler h = this.PropertyChanging;
+            if ((h != null))
+            {
+                h(this, emptyChangingEventArgs);
+            }
+        }
+
+        protected virtual void SendPropertyChanged(string propertyName)
+        {
+            System.ComponentModel.PropertyChangedEventHandler h = this.PropertyChanged;
+            if ((h != null))
+            {
+                h(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        #region Attachment handlers
+        private void AppCustomerItems_Attach(AppCustomerItem entity)
+        {
+            this.SendPropertyChanging();
+            entity.AppCustomerItemCategory = this;
+        }
+
+        private void AppCustomerItems_Detach(AppCustomerItem entity)
+        {
+            this.SendPropertyChanging();
+            entity.AppCustomerItemCategory = null;
         }
         #endregion
     }
