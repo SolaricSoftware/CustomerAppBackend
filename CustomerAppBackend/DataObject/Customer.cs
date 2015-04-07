@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Web.Script.Serialization;
 using System.Linq;
 
-using CustomerAppBackend.ShopifyInterface;
+using CustomerAppBackend.ShopInterface;
 
 namespace CustomerAppBackend.DataObject
 {
@@ -13,6 +13,18 @@ namespace CustomerAppBackend.DataObject
         public Customer()
         {
             this.Addressess = new List<Address>();
+        }
+
+        public Customer(IDictionary data)
+            : this()
+        {
+            this.LoadFromObject(data);
+        }
+
+        public int Id
+        {
+            get;
+            set;
         }
 
         public string FirstName
@@ -34,6 +46,18 @@ namespace CustomerAppBackend.DataObject
         }
 
         public string Password
+        {
+            get;
+            set;
+        }
+
+        public string Note
+        {
+            get;
+            set;
+        }
+
+        public int OrderCount
         {
             get;
             set;
@@ -69,10 +93,13 @@ namespace CustomerAppBackend.DataObject
         {
             if (data == null || data.Keys.Count == 0)
                 return;
-            
+
+            this.Id = (int)data["id"];
             this.FirstName = data["first_name"].ToString();
             this.LastName = data["last_name"].ToString();
             this.Email = data["email"].ToString();
+            this.Note = data["note"].ToString();
+            this.OrderCount = (int)data["orders_count"];
 
 //            var dic = data["addresses"] as IDictionary;
 //            if (dic != null)
@@ -90,8 +117,7 @@ namespace CustomerAppBackend.DataObject
             {
                 foreach (var addr in arr)
                 {
-                    var address = new Address();
-                    address.LoadFromObject(addr as IDictionary);
+                    var address = new Address(addr as IDictionary);
                     this.Addressess.Add(address);
                 }
             }

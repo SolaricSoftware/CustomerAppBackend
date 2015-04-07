@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 
-namespace CustomerAppBackend.ShopifyInterface
+namespace CustomerAppBackend.ShopInterface
 {
     public enum HttpMethods
     {
@@ -17,13 +17,45 @@ namespace CustomerAppBackend.ShopifyInterface
         DELETE
     }
 
+    public enum FinancialStatus
+    {
+        Unknown,
+        Pending,
+        Authorized,
+        Partially_Paid,
+        Paid,
+        Partially_Refunded,
+        Refunded,
+        Voided
+    }
+
+
+    public enum ShipmentStatus
+    {
+        Unknown,
+        Pending,
+        Success,
+        Cancelled,
+        Error,
+        Failure
+    }
+
+    public enum CancelReason
+    {
+        Unknown,
+        Customer,
+        Fraud,
+        Inventory,
+        Other
+    }
+
     public class ShopInterfaceBase
     {
         public ShopInterfaceBase()
         {
         }
 
-        public List<T> Transform<T>(object obj) where T: IShopify, new()
+        protected List<T> Transform<T>(object obj) where T: IShopify, new()
         {
             var retval = new List<T>();
             if (obj is IDictionary)
@@ -63,6 +95,16 @@ namespace CustomerAppBackend.ShopifyInterface
             }
 
             return retval;
+        }
+
+        protected T Deserialize<T>(string data)
+        {
+            return (new JavaScriptSerializer()).Deserialize<T>(data);
+        }
+
+        protected string Serialize(object data)
+        {
+            return (new JavaScriptSerializer()).Serialize(data);
         }
     }
 }

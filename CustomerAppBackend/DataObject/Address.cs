@@ -3,7 +3,7 @@ using System.Web.Script.Serialization;
 using System.Collections.Generic;
 using System.Collections;
 
-using CustomerAppBackend.ShopifyInterface;
+using CustomerAppBackend.ShopInterface;
 
 namespace CustomerAppBackend.DataObject
 {
@@ -12,6 +12,18 @@ namespace CustomerAppBackend.DataObject
         public Address()
         {
             this.Country = "US";
+        }
+
+        public Address(IDictionary data)
+            : this()
+        {
+            this.LoadFromObject(data);
+        }
+
+        public int Id
+        {
+            get;
+            set;
         }
 
         public string Address1
@@ -108,7 +120,8 @@ namespace CustomerAppBackend.DataObject
         {
             if (data == null || data.Keys.Count == 0)
                 return;
-            
+
+            this.Id = (int)data["id"];
             this.Address1 = data["address1"].ToString();
             this.Address2 = data["address2"].ToString();
             this.City = data["city"].ToString();

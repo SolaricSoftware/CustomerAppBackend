@@ -10,7 +10,7 @@ using System.Web.Script.Serialization;
 
 using CustomerAppBackend.Data;
 using CustomerAppBackend.DataObject;
-using CustomerAppBackend.ShopifyInterface;
+using CustomerAppBackend.ShopInterface.Shopify;
 
 namespace CustomerAppBackend.Controllers
 {
@@ -182,18 +182,15 @@ namespace CustomerAppBackend.Controllers
 
         public JsonResult CreateCustomer(string data)
         {
-            var customer = Deserialize<Customer>(data);
             var api = new Shopify();
-            var path = "/admin/customers.json";
-            var retval = api.Post<Customer>(path, customer);
+            var retval = api.CreateCustomer(data).FirstOrDefault();
             return Json(retval);
         }
 
         public JsonResult GetCustomer(string email)
         {
-            var path = "/admin/customers/search.json";
             var api = new Shopify();
-            var retval = api.Get<Customer>(path, String.Format("query= email:{0}", email));
+            var retval = api.GetCustomer(email).FirstOrDefault();
             return Json(retval);
         }
 
@@ -225,20 +222,10 @@ namespace CustomerAppBackend.Controllers
             };
 
 
-            this.CreateCustomer(this.Serialize(customer));
+            //this.CreateCustomer(this.Serialize(customer));
             //this.GetCustomer("olan.hall@icloud.com");
 
             var a = 1 + 1;
-        }
-
-        private T Deserialize<T>(string data)
-        {
-            return (new JavaScriptSerializer()).Deserialize<T>(data);
-        }
-
-        private string Serialize(object data)
-        {
-            return (new JavaScriptSerializer()).Serialize(data);
         }
     }
 }

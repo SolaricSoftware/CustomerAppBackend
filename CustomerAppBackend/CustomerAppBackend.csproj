@@ -72,7 +72,8 @@
     <Folder Include="Data\" />
     <Folder Include="DataObject\" />
     <Folder Include="Views\Api\" />
-    <Folder Include="ShopifyInterface\" />
+    <Folder Include="ShopInterface\" />
+    <Folder Include="ShopInterface\Shopify\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\HomeController.cs" />
@@ -93,9 +94,16 @@
     <Compile Include="DataObject\AppCustomerItemCategoryDao.cs" />
     <Compile Include="DataObject\Customer.cs" />
     <Compile Include="DataObject\Address.cs" />
-    <Compile Include="ShopifyInterface\Shopify.cs" />
-    <Compile Include="ShopifyInterface\ShopInterfaceBase.cs" />
-    <Compile Include="ShopifyInterface\IShopify.cs" />
+    <Compile Include="ShopInterface\Shopify\Shopify.cs" />
+    <Compile Include="ShopInterface\IShopify.cs" />
+    <Compile Include="ShopInterface\ShopInterfaceBase.cs" />
+    <Compile Include="DataObject\Order.cs" />
+    <Compile Include="ShopInterface\Shopify\ShopifyBase.cs" />
+    <Compile Include="ShopInterface\Enum.cs" />
+    <Compile Include="DataObject\Shipment.cs" />
+    <Compile Include="DataObject\LineItem.cs" />
+    <Compile Include="DataObject\Receipt.cs" />
+    <Compile Include="DataObject\PaymentDetails.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace CustomerAppBackend.ShopifyInterface
+namespace CustomerAppBackend.ShopInterface
 {
     public interface IShopify
     {

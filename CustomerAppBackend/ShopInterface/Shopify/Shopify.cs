@@ -9,8 +9,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 using CustomerAppBackend.DataObject;
+using CustomerAppBackend.ShopInterface;
 
-namespace CustomerAppBackend.ShopifyInterface
+namespace CustomerAppBackend.ShopInterface.Shopify
 {
     public class Shopify : ShopInterfaceBase
     {
@@ -21,6 +22,30 @@ namespace CustomerAppBackend.ShopifyInterface
         public Shopify()
         {
         }
+
+        public List<Customer> GetCustomer(string email)
+        {
+            var path = "/admin/customers/search.json";
+            var retval = this.Get<Customer>(path, String.Format("query= email:{0}", email));
+            return retval;
+        }
+
+        public List<Customer> GetCustomer(int id)
+        {
+            var path= String.Format("/admin/customers/#{0}.json", id);
+            var retval = this.Get<Customer>(path, null);
+            return retval;
+        }
+
+        public List<Customer> CreateCustomer(string data)
+        {
+            var customer = Deserialize<Customer>(data);
+            var path = "/admin/customers.json";
+            var retval = this.Post<Customer>(path, customer);
+            return retval;
+        }
+
+
 
         public List<T> Get<T>(string path, string data) where T: IShopify, new()
         {
