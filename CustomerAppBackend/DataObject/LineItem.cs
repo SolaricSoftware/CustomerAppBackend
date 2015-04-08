@@ -17,7 +17,7 @@ namespace CustomerAppBackend.DataObject
         public LineItem(IDictionary data)
             : this()
         {
-            this.LoadFromObject(data);
+            this.LoadFromShopifyObject(data);
         }
 
         public int Id
@@ -129,7 +129,7 @@ namespace CustomerAppBackend.DataObject
             throw new NotImplementedException();
         }
 
-        public void LoadFromObject(IDictionary data)
+        public void LoadFromShopifyObject(IDictionary data)
         {
             if (data == null || data.Keys.Count == 0)
                 return;

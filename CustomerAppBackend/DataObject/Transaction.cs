@@ -5,19 +5,17 @@ using System.Web.Script.Serialization;
 using System.Linq;
 
 using CustomerAppBackend.ShopInterface;
-using CustomerAppBackend.ShopInterface.Shopify;
+
 
 namespace CustomerAppBackend.DataObject
 {
-    public class Shipment : IShopify
+    public class Transaction : IShopify
     {
-        public Shipment()
+        public Transaction()
         {
-            this.TrackingNumbers = new List<String>();
-            this.TrackingUrls = new List<String>();
         }
 
-        public Shipment(IDictionary data)
+        public Transaction(IDictionary data)
             : this()
         {
             this.LoadFromShopifyObject(data);
@@ -29,13 +27,31 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
+        public decimal Amount
+        {
+            get;
+            set;
+        }
+
+        public string Authorization
+        {
+            get;
+            set;
+        }
+
         public DateTime CreatedAt
         {
             get;
             set;
         }
 
-        public LineItem LineItem
+        public PaymentDetail PaymentDetail
+        {
+            get;
+            set;
+        }
+
+        public TransactionType TransactionType
         {
             get;
             set;
@@ -53,31 +69,31 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
+        public ErrorCode Error
+        {
+            get;
+            set;
+        }
+
         public Status Status
         {
             get;
             set;
         }
 
-        public string TrackingCompany
+        public bool Test
         {
             get;
             set;
         }
 
-        public List<String> TrackingNumbers
+        public int UserId
         {
             get;
             set;
         }
 
-        public List<String> TrackingUrls
-        {
-            get;
-            set;
-        }
-
-        public DateTime UpdatedAt
+        public string Currency
         {
             get;
             set;
@@ -92,15 +108,19 @@ namespace CustomerAppBackend.DataObject
 
         public void LoadFromShopifyObject(IDictionary data)
         {
+            this.Amount = (decimal)data["amount"];
+            this.Authorization = data["authorization"] as String;
             this.CreatedAt = DateTime.Parse(data["created_at"] as String);
+            this.PaymentDetail = new PaymentDetail(data["payment_details"] as IDictionary);
             this.Id = (int)data["id"];
+            this.TransactionType = Enum<CustomerAppBackend.ShopInterface.TransactionType>.Parse(data["kind"] as String);
             this.OrderId = (int)data["order_id"];
-            this.Status = Enum<Status>.Parse(data["status"] as String);
-            this.TrackingCompany = data["tracking_company"] as String;
-            this.TrackingNumbers = data["tracking_number"] as List<String>;
-            this.TrackingUrls = data["tracking_urls"] as List<String>;
-            this.UpdatedAt = DateTime.Parse(data["updated_at"] as String);
             this.Receipt = new Receipt(data["receipt"] as IDictionary);
+            this.Error = Enum<CustomerAppBackend.ShopInterface.ErrorCode>.Parse(data["error_code"] as String);
+            this.Status = Enum<CustomerAppBackend.ShopInterface.Status>.Parse(data["status"] as String);
+            this.Test = (bool)data["test"];
+            this.UserId = (int)data["user_id"];
+            this.Currency = data["currenty"] as String;
         }
 
         #endregion

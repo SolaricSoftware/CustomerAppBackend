@@ -6,19 +6,23 @@ using System.Linq;
 
 using CustomerAppBackend.ShopInterface;
 
-
 namespace CustomerAppBackend.DataObject
 {
     public class Order : IShopify
     {
         public Order()
         {
+            this.DiscountCodes = new List<DiscountCode>();
+            this.Shipments = new List<Shipment>();
+            this.LineItems = new List<LineItem>();
+            this.Refunds = new List<Refund>();
+            this.ShippingMethods = new List<ShippingMethod>();
         }
 
         public Order(IDictionary data) 
             : this()
         {
-            this.LoadFromObject(data);
+            this.LoadFromShopifyObject(data);
         }
 
         public int Id
@@ -75,7 +79,7 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public List<String> DiscountCodes
+        public List<DiscountCode> DiscountCodes
         {
             get;
             set;
@@ -99,7 +103,7 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public ShipmentStatus ShipmentStatus
+        public ShipmentStatus Status
         {
             get;
             set;
@@ -135,7 +139,90 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public PaymentDetails PaymentDetails
+        public PaymentDetail PaymentDetails
+        {
+            get;
+            set;
+        }
+
+        public DateTime ProcessedAt
+        {
+            get;
+            set;
+        }
+
+        public List<Refund> Refunds
+        {
+            get;
+            set;
+        }
+
+        public Address ShippingAddress
+        {
+            get;
+            set;
+        }
+
+        public List<ShippingMethod> ShippingMethods
+        {
+            get;
+            set;
+        }
+
+        public decimal Subtotal
+        {
+            get;
+            set;
+        }
+
+        public List<TaxInfo> TaxInfos
+        {
+            get;
+            set;
+        }
+
+        public bool TaxesIncluded
+        {
+            get;
+            set;
+        }
+
+        public string Token
+        {
+            get;
+            set;
+        }
+
+        public decimal TotalDiscount
+        {
+            get;
+            set;
+        }
+
+        public decimal TotalLineItemPrice
+        {
+            get;
+            set;
+        }
+
+        public decimal TotalPrice {
+            get;
+            set;
+        }
+
+        public decimal TotalTax
+        {
+            get;
+            set;
+        }
+
+        public int TotalWeight
+        {
+            get;
+            set;
+        }
+
+        public DateTime UpdatedAt
         {
             get;
             set;
@@ -148,7 +235,7 @@ namespace CustomerAppBackend.DataObject
             throw new NotImplementedException();
         }
 
-        public void LoadFromObject(IDictionary data)
+        public void LoadFromShopifyObject(IDictionary data)
         {
             this.Id = (int)data["id"];
             this.BillingAddress = new Address(data["billing_address"] as IDictionary);
@@ -159,17 +246,37 @@ namespace CustomerAppBackend.DataObject
             this.CreatedAt = DateTime.Parse(data["created_at"] as String);
             this.Currency = data["currency"] as String;
             this.Customer = new Customer(data["cusomter"] as IDictionary);
-            this.DiscountCodes = data["discount_codes"] as List<String>;
             this.Email = data["email"] as String;
             this.FinancialStatus = Enum<CustomerAppBackend.ShopInterface.FinancialStatus>.Parse(data["financial_status"] as String);
-            this.ShipmentStatus = Enum<CustomerAppBackend.ShopInterface.ShipmentStatus>.Parse(data["fulfillment_status"] as String);
+            this.Status = Enum<CustomerAppBackend.ShopInterface.ShipmentStatus>.Parse(data["fulfillment_status"] as String);
             this.Name = data["name"] as String;
             this.Note = data["note"] as String;
             this.NumericalIdentifier = (int)data["number"];
             this.OrderNumber = (int)data["order_number"];
-            this.PaymentDetails = new PaymentDetails(data["payment_details"] as IDictionary);
+            this.PaymentDetails = new PaymentDetail(data["payment_details"] as IDictionary);
+            this.Subtotal = (decimal)data["subtotal_price"];
+            this.TaxesIncluded = (bool)data["taxes_included"];
+            this.Token = data["token"] as String;
+            this.TotalDiscount = (decimal)data["total_discounts"];
+            this.TotalLineItemPrice = (decimal)data["total_line_items_price"];
+            this.TotalPrice = (decimal)data["total_price"];
+            this.TotalTax = (decimal)data["total_tax"];
+            this.TotalWeight = (int)data["total_weight"];
+            this.UpdatedAt = DateTime.Parse(data["updated_at"] as String);
 
-            var arr = data["fulfillments"] as Array;
+            this.TaxInfos = ShopInterfaceBase.Transform<TaxInfo>(data["tax_line"]);
+
+            var arr = data["discount_codes"] as Array;
+            if (arr != null)
+            {
+                foreach (var item in arr)
+                {
+                    var discountCode = new DiscountCode(item as IDictionary);
+                    this.DiscountCodes.Add(discountCode);
+                }
+            }
+
+            arr = data["fulfillments"] as Array;
             if (arr != null)
             {
                 foreach (var item in arr)
@@ -188,6 +295,26 @@ namespace CustomerAppBackend.DataObject
                     this.LineItems.Add(lineItem);
                 }
             }
+
+            arr = data["refund"] as Array;
+            if (arr != null)
+            {
+                foreach (var item in arr)
+                {
+                    var refund = new Refund(item as IDictionary);
+                    this.Refunds.Add(refund);
+                }
+            }
+
+//            arr = data["tax_lines"] as Array;
+//            if (arr != null)
+//            {
+//                foreach (var item in arr)
+//                {
+//                    var taxInfo = new TaxInfo(item as IDictionary);
+//                    this.TaxInfos.Add(taxInfo);
+//                }
+//            }
         }
 
         #endregion

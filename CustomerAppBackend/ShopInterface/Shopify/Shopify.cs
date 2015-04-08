@@ -50,7 +50,7 @@ namespace CustomerAppBackend.ShopInterface.Shopify
         public List<T> Get<T>(string path, string data) where T: IShopify, new()
         {
             var obj = this.Get(path, data);
-            var retval = this.Transform<T>(obj);
+            var retval = Transform<T>(obj);
             return retval;
         }
 
@@ -82,7 +82,7 @@ namespace CustomerAppBackend.ShopInterface.Shopify
         public List<T> Post<T>(string path, IShopify data) where T: IShopify, new()
         {
             var obj = this.Post(path, data);
-            var retval = this.Transform<T>(obj);
+            var retval = Transform<T>(obj);
             return retval;
         }
 

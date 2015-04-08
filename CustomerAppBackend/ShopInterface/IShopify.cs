@@ -7,7 +7,7 @@ namespace CustomerAppBackend.ShopInterface
     public interface IShopify
     {
         string ToShopifyJson();
-        void LoadFromObject(IDictionary data);
+        void LoadFromShopifyObject(IDictionary data);
     }
 }
 

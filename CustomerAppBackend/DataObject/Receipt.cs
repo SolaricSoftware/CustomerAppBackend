@@ -17,7 +17,7 @@ namespace CustomerAppBackend.DataObject
         public Receipt(IDictionary data)
             : this()
         {
-            this.LoadFromObject(data);
+            this.LoadFromShopifyObject(data);
         }
 
         public bool TestCase {
@@ -45,7 +45,7 @@ namespace CustomerAppBackend.DataObject
             return retval;
         }
 
-        public void LoadFromObject(IDictionary data)
+        public void LoadFromShopifyObject(IDictionary data)
         {
             if (data == null || data.Keys.Count == 0)
                 return;

@@ -8,16 +8,16 @@ using CustomerAppBackend.ShopInterface;
 
 namespace CustomerAppBackend.DataObject
 {
-    public class PaymentDetails : IShopify
+    public class PaymentDetail : IShopify
     {
-        public PaymentDetails()
+        public PaymentDetail()
         {
         }
 
-        public PaymentDetails(IDictionary data)
+        public PaymentDetail(IDictionary data)
             : this()
         {
-            this.LoadFromObject(data);
+            this.LoadFromShopifyObject(data);
         }
 
         public string AvsResultCode
@@ -57,7 +57,7 @@ namespace CustomerAppBackend.DataObject
             throw new NotImplementedException();
         }
 
-        public void LoadFromObject(IDictionary data)
+        public void LoadFromShopifyObject(IDictionary data)
         {
             this.AvsResultCode = data["avs_result_code"] as String;
             this.CreditCardBin = data["credit_card_bin"] as String;

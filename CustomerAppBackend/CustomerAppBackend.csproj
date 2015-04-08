@@ -103,7 +103,13 @@
     <Compile Include="DataObject\Shipment.cs" />
     <Compile Include="DataObject\LineItem.cs" />
     <Compile Include="DataObject\Receipt.cs" />
-    <Compile Include="DataObject\PaymentDetails.cs" />
+    <Compile Include="DataObject\Refund.cs" />
+    <Compile Include="DataObject\RefundLineItem.cs" />
+    <Compile Include="DataObject\Transaction.cs" />
+    <Compile Include="DataObject\PaymentDetail.cs" />
+    <Compile Include="DataObject\ShippingMethod.cs" />
+    <Compile Include="DataObject\DiscountCode.cs" />
+    <Compile Include="DataObject\TaxInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />

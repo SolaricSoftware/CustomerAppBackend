@@ -30,7 +30,7 @@ namespace CustomerAppBackend.ShopInterface
     }
 
 
-    public enum ShipmentStatus
+    public enum Status
     {
         Unknown,
         Pending,
@@ -38,6 +38,13 @@ namespace CustomerAppBackend.ShopInterface
         Cancelled,
         Error,
         Failure
+    }
+
+    public enum ShipmentStatus
+    {
+        Fulfilled,
+        Null,
+        Partial
     }
 
     public enum CancelReason
@@ -49,13 +56,45 @@ namespace CustomerAppBackend.ShopInterface
         Other
     }
 
+    public enum TransactionType
+    {
+        Authorization,
+        Capture,
+        Sale,
+        Void,
+        Refund
+    }
+
+    public enum ErrorCode
+    {
+        Incorrect_Number,
+        Invalid_Number,
+        Invalid_Expiry_Date,
+        Invalid_Cvc,
+        Expired_Card,
+        Incorrect_Cvc,
+        Incorrect_Zip,
+        Incorrect_Address,
+        Card_Declined,
+        Processing_Error,
+        Call_Issuer,
+        PIck_Up_Card
+    }
+
+    public enum DiscountCodeType
+    {
+        Percentage,
+        Shipping,
+        Fixed_Amount
+    }
+
     public class ShopInterfaceBase
     {
         public ShopInterfaceBase()
         {
         }
 
-        protected List<T> Transform<T>(object obj) where T: IShopify, new()
+        public static List<T> Transform<T>(object obj) where T: IShopify, new()
         {
             var retval = new List<T>();
             if (obj is IDictionary)
@@ -66,7 +105,7 @@ namespace CustomerAppBackend.ShopInterface
                     if (dic[key] is IDictionary)
                     {
                         var c = new T();
-                        c.LoadFromObject(dic[key] as IDictionary);
+                        c.LoadFromShopifyObject(dic[key] as IDictionary);
                         retval.Add(c);
                     }
                     else if(dic[key] is Array)
@@ -74,7 +113,7 @@ namespace CustomerAppBackend.ShopInterface
                         foreach (var item in (dic[key] as Array))
                         {
                             var c = new T();
-                            c.LoadFromObject(item as IDictionary);
+                            c.LoadFromShopifyObject(item as IDictionary);
                             retval.Add(c);
                         }
                     }
@@ -88,7 +127,7 @@ namespace CustomerAppBackend.ShopInterface
                     if (item is IDictionary)
                     {
                         var c = new T();
-                        c.LoadFromObject(item as IDictionary);
+                        c.LoadFromShopifyObject(item as IDictionary);
                         ((IList)retval).Add(item);
                     }
                 }
