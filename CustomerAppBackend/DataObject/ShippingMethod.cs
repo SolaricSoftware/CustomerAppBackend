@@ -12,6 +12,7 @@ namespace CustomerAppBackend.DataObject
     {
         public ShippingMethod()
         {
+            this.Taxes = new List<TaxInfo>();
         }
 
         public ShippingMethod(IDictionary data)
@@ -44,7 +45,7 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public List<TaxInfo> TaxInfos
+        public List<TaxInfo> Taxes
         {
             get;
             set;
@@ -60,19 +61,10 @@ namespace CustomerAppBackend.DataObject
         public void LoadFromShopifyObject(IDictionary data)
         {
             this.Code = data["code"] as String;
-            this.Price = (decimal)data["price"];
+            this.Price = Decimal.Parse(data["price"] as String);
             this.Source = data["source"] as String;
             this.Title = data["title"] as String;
-
-            var arr = data["tax_lines"] as Array;
-            if (arr != null)
-            {
-                foreach (var item in arr)
-                {
-                    var taxInfo = new TaxInfo(item as IDictionary);
-                    this.TaxInfos.Add(taxInfo);
-                }
-            }
+            this.Taxes = ShopInterfaceBase.Transform<TaxInfo>(data[""]);
         }
 
         #endregion

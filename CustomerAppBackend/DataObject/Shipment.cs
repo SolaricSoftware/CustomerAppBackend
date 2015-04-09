@@ -13,7 +13,6 @@ namespace CustomerAppBackend.DataObject
     {
         public Shipment()
         {
-            this.TrackingNumbers = new List<String>();
             this.TrackingUrls = new List<String>();
         }
 
@@ -35,11 +34,11 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public LineItem LineItem
-        {
-            get;
-            set;
-        }
+//        public LineItem LineItem
+//        {
+//            get;
+//            set;
+//        }
 
         public int OrderId
         {
@@ -53,7 +52,7 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public Status Status
+        public ShipmentStatus Status
         {
             get;
             set;
@@ -65,7 +64,7 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public List<String> TrackingNumbers
+        public string TrackingNumber
         {
             get;
             set;
@@ -77,7 +76,7 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public DateTime UpdatedAt
+        public DateTime? UpdatedAt
         {
             get;
             set;
@@ -95,12 +94,15 @@ namespace CustomerAppBackend.DataObject
             this.CreatedAt = DateTime.Parse(data["created_at"] as String);
             this.Id = (int)data["id"];
             this.OrderId = (int)data["order_id"];
-            this.Status = Enum<Status>.Parse(data["status"] as String);
             this.TrackingCompany = data["tracking_company"] as String;
-            this.TrackingNumbers = data["tracking_number"] as List<String>;
+            this.TrackingNumber = data["tracking_number"] as String;
             this.TrackingUrls = data["tracking_urls"] as List<String>;
-            this.UpdatedAt = DateTime.Parse(data["updated_at"] as String);
+            this.UpdatedAt = data["updated_at"] != null ? DateTime.Parse(data["updated_at"] as String) : (DateTime?)null;
             this.Receipt = new Receipt(data["receipt"] as IDictionary);
+
+            ShipmentStatus sstatus;
+            Enum<ShipmentStatus>.TryParse(data["status"] as String, out sstatus);
+            this.Status = sstatus;
         }
 
         #endregion

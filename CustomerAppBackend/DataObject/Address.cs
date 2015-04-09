@@ -20,11 +20,12 @@ namespace CustomerAppBackend.DataObject
             this.LoadFromShopifyObject(data);
         }
 
-        public int Id
-        {
-            get;
-            set;
-        }
+        //Id is sometimes present, sometimes not. Do we really need to know it?
+//        public int Id
+//        {
+//            get;
+//            set;
+//        }
 
         public string Address1
         {
@@ -121,19 +122,19 @@ namespace CustomerAppBackend.DataObject
             if (data == null || data.Keys.Count == 0)
                 return;
 
-            this.Id = (int)data["id"];
-            this.Address1 = data["address1"].ToString();
-            this.Address2 = data["address2"].ToString();
-            this.City = data["city"].ToString();
-            this.State = data["province"].ToString();
-            this.Zip = data["zip"].ToString();
-            this.Country = data["country"].ToString();
-            this.Phone = data["phone"].ToString();
-            this.FirstName = data["first_name"].ToString();
-            this.LastName = data["last_name"].ToString();
-            this.Company = data["company"].ToString();
-            this.Name = data["name"].ToString();
-            this.Default = (bool)data["default"];
+            //this.Id = (int)data["id"];
+            this.Address1 = data["address1"] as String;
+            this.Address2 = data["address2"] as String;
+            this.City = data["city"] as String;
+            this.State = data["province"] as String;
+            this.Zip = data["zip"] as String;
+            this.Country = data["country"] as String;
+            this.Phone = data["phone"] as String;
+            this.FirstName = data["first_name"] as String;
+            this.LastName = data["last_name"] as String;
+            this.Company = data["company"] as String;
+            this.Name = data["name"] as String;
+            this.Default = (data["default"] as String ?? String.Empty) == "True";
         }
     }
 }

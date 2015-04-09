@@ -139,7 +139,7 @@ namespace CustomerAppBackend.DataObject
             this.FulfillmentService = data["fulfillment_service"] as String;
             this.FulfillmentStatus = data["fulfillment_status"] as String;
             this.Grams = (int)data["grams"];
-            this.Price = (decimal)data["price"];
+            this.Price = Decimal.Parse(data["price"] as String);
             this.ProductId = (int)data["product_id"];
             this.Quantity = (int)data["quantity"];
             this.RequiresShipping = (bool)data["requires_shipping"];

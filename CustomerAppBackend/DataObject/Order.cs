@@ -5,6 +5,7 @@ using System.Web.Script.Serialization;
 using System.Linq;
 
 using CustomerAppBackend.ShopInterface;
+using SI = CustomerAppBackend.ShopInterface;
 
 namespace CustomerAppBackend.DataObject
 {
@@ -37,13 +38,13 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public CustomerAppBackend.ShopInterface.CancelReason CancelReason
+        public CancelReason CancelReason
         {
             get;
             set;
         }
 
-        public DateTime CancelledAt
+        public DateTime? CancelledAt
         {
             get;
             set;
@@ -55,7 +56,7 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public DateTime ClosedAt
+        public DateTime? ClosedAt
         {
             get;
             set;
@@ -103,7 +104,7 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public ShipmentStatus Status
+        public OrderStatus Status
         {
             get;
             set;
@@ -175,7 +176,7 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public List<TaxInfo> TaxInfos
+        public List<TaxInfo> Taxes
         {
             get;
             set;
@@ -239,82 +240,51 @@ namespace CustomerAppBackend.DataObject
         {
             this.Id = (int)data["id"];
             this.BillingAddress = new Address(data["billing_address"] as IDictionary);
-            this.CancelReason = Enum<CustomerAppBackend.ShopInterface.CancelReason>.Parse(data["cancel_reason"] as String);
-            this.CancelledAt = DateTime.Parse(data["cancelled_at"] as String);
             this.CartToken = data["cart_token"] as String;
-            this.ClosedAt = DateTime.Parse(data["closed_at"] as String);
+            this.CancelledAt = data["cancelled_at"] != null ?  DateTime.Parse(data["cancelled_at"] as String) : (DateTime?)null;
+            this.ClosedAt = data["closed_at"] != null ? DateTime.Parse(data["closed_at"] as String) : (DateTime?)null;
             this.CreatedAt = DateTime.Parse(data["created_at"] as String);
             this.Currency = data["currency"] as String;
-            this.Customer = new Customer(data["cusomter"] as IDictionary);
+            this.Customer = new Customer(data["customer"] as IDictionary);
             this.Email = data["email"] as String;
-            this.FinancialStatus = Enum<CustomerAppBackend.ShopInterface.FinancialStatus>.Parse(data["financial_status"] as String);
-            this.Status = Enum<CustomerAppBackend.ShopInterface.ShipmentStatus>.Parse(data["fulfillment_status"] as String);
             this.Name = data["name"] as String;
             this.Note = data["note"] as String;
             this.NumericalIdentifier = (int)data["number"];
             this.OrderNumber = (int)data["order_number"];
             this.PaymentDetails = new PaymentDetail(data["payment_details"] as IDictionary);
-            this.Subtotal = (decimal)data["subtotal_price"];
+            this.Subtotal = Decimal.Parse(data["subtotal_price"] as String);
             this.TaxesIncluded = (bool)data["taxes_included"];
             this.Token = data["token"] as String;
-            this.TotalDiscount = (decimal)data["total_discounts"];
-            this.TotalLineItemPrice = (decimal)data["total_line_items_price"];
-            this.TotalPrice = (decimal)data["total_price"];
-            this.TotalTax = (decimal)data["total_tax"];
+            this.TotalDiscount = Decimal.Parse(data["total_discounts"] as String);
+            this.TotalLineItemPrice = Decimal.Parse(data["total_line_items_price"] as String);
+            this.TotalPrice = Decimal.Parse(data["total_price"] as String);
+            this.TotalTax = Decimal.Parse(data["total_tax"] as String);
             this.TotalWeight = (int)data["total_weight"];
             this.UpdatedAt = DateTime.Parse(data["updated_at"] as String);
 
-            this.TaxInfos = ShopInterfaceBase.Transform<TaxInfo>(data["tax_line"]);
+            if (data["shipping_address"] != null)
+                this.ShippingAddress = new Address(data["shipping_address"] as IDictionary);
+            else
+                this.ShippingAddress = this.BillingAddress;
 
-            var arr = data["discount_codes"] as Array;
-            if (arr != null)
-            {
-                foreach (var item in arr)
-                {
-                    var discountCode = new DiscountCode(item as IDictionary);
-                    this.DiscountCodes.Add(discountCode);
-                }
-            }
+            SI.CancelReason reason;
+            Enum<SI.CancelReason>.TryParse(data["cancel_reason"] as String, out reason);
+            this.CancelReason = reason;
 
-            arr = data["fulfillments"] as Array;
-            if (arr != null)
-            {
-                foreach (var item in arr)
-                {
-                    var shipment = new Shipment(item as IDictionary);
-                    this.Shipments.Add(shipment);
-                }
-            }
+            SI.FinancialStatus fstatus;
+            Enum<SI.FinancialStatus>.TryParse(data["financial_status"] as String, out fstatus);
+            this.FinancialStatus = fstatus;
 
-            arr = data["line_items"] as Array;
-            if (arr != null)
-            {
-                foreach (var item in arr)
-                {
-                    var lineItem = new LineItem(item as IDictionary);
-                    this.LineItems.Add(lineItem);
-                }
-            }
+            SI.OrderStatus ostatus;
+            Enum<SI.OrderStatus>.TryParse(data["fulfillment_status"] as String, out ostatus);
+            this.Status = ostatus;
 
-            arr = data["refund"] as Array;
-            if (arr != null)
-            {
-                foreach (var item in arr)
-                {
-                    var refund = new Refund(item as IDictionary);
-                    this.Refunds.Add(refund);
-                }
-            }
-
-//            arr = data["tax_lines"] as Array;
-//            if (arr != null)
-//            {
-//                foreach (var item in arr)
-//                {
-//                    var taxInfo = new TaxInfo(item as IDictionary);
-//                    this.TaxInfos.Add(taxInfo);
-//                }
-//            }
+            this.DiscountCodes = ShopInterfaceBase.Transform<DiscountCode>(data["discount_codes"]);
+            this.Shipments = ShopInterfaceBase.Transform<Shipment>(data["fulfillments"]);
+            this.LineItems = ShopInterfaceBase.Transform<LineItem>(data["line_items"]);
+            this.Refunds = ShopInterfaceBase.Transform<Refund>(data["refund"]);
+            this.Taxes = ShopInterfaceBase.Transform<TaxInfo>(data["tax_lines"]);
+            this.ShippingMethods = ShopInterfaceBase.Transform<ShippingMethod>(data["shipping_lines"]);
         }
 
         #endregion

@@ -180,52 +180,60 @@ namespace CustomerAppBackend.Controllers
 //            return Json(retval, JsonRequestBehavior.AllowGet);
 //        }
 
-        public JsonResult CreateCustomer(string data)
+        public JsonResult CreateCustomer()
         {
+            var data = Request["customer"];
             var api = new Shopify();
             var retval = api.CreateCustomer(data).FirstOrDefault();
             return Json(retval);
         }
 
-        public JsonResult GetCustomer(string email)
+        public JsonResult GetCustomer()
         {
+            var email = Request["email"];
             var api = new Shopify();
-            var retval = api.GetCustomer(email).FirstOrDefault();
+            var retval = api.GetCustomer(email);
             return Json(retval);
         }
 
-        public JsonResult GetOrders(int customerId)
+        public JsonResult GetOrders()
         {
-            return Json("");
+            var customerId = Int32.Parse(Request["customerId"]);
+            var api = new Shopify();
+            var retval = api.GetOrders(customerId);
+            return Json(retval);
         }
             
         public void StoreTest() {
-            var customer = new Customer
-            {
-                    FirstName = "Jane",
-                    LastName = "Doe15",
-                    Email = "jane.doe15@testemail.com",
-                    Addressess = new List<Address> {
-                        new Address {
-                            Address1 = "123 E Spring St",
-                            Address2 = "Apt 12",
-                            City = "New Albany",
-                            State = "IN",
-                            Zip = "47150",
-                            Country = "US",
-                            FirstName = "Jane",
-                            LastName = "Doe",
-                            Phone = "8125551212"
-                        }
-                    },
-                    Password = "password1"
-            };
+//            var customer = new Customer
+//            {
+//                    FirstName = "Jane",
+//                    LastName = "Doe15",
+//                    Email = "jane.doe15@testemail.com",
+//                    Addressess = new List<Address> {
+//                        new Address {
+//                            Address1 = "123 E Spring St",
+//                            Address2 = "Apt 12",
+//                            City = "New Albany",
+//                            State = "IN",
+//                            Zip = "47150",
+//                            Country = "US",
+//                            FirstName = "Jane",
+//                            LastName = "Doe",
+//                            Phone = "8125551212"
+//                        }
+//                    },
+//                    Password = "password1"
+//            };
+
+            var api = new Shopify();
+            //var customer = api.GetCustomer("olan.hall@icloud.com");
+            //var orders = api.GetOrders(customer.Id);
+            //var customers = api.SearchCustomer("default_address.zip:12345");
 
 
-            //this.CreateCustomer(this.Serialize(customer));
-            //this.GetCustomer("olan.hall@icloud.com");
 
-            var a = 1 + 1;
+//            var a = 1 + 1;
         }
     }
 }

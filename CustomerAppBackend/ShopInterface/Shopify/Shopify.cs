@@ -23,18 +23,25 @@ namespace CustomerAppBackend.ShopInterface.Shopify
         {
         }
 
-        public List<Customer> GetCustomer(string email)
+        public List<Customer> SearchCustomers(string query)
         {
             var path = "/admin/customers/search.json";
-            var retval = this.Get<Customer>(path, String.Format("query= email:{0}", email));
+            var retval = this.Get<Customer>(path, String.Format("query= {0}", query));
             return retval;
         }
 
-        public List<Customer> GetCustomer(int id)
+        public Customer GetCustomer(string email)
+        {
+            var path = "/admin/customers/search.json";
+            var retval = this.Get<Customer>(path, String.Format("query= email:{0}", email));
+            return retval.FirstOrDefault();
+        }
+
+        public Customer GetCustomer(int id)
         {
             var path= String.Format("/admin/customers/#{0}.json", id);
-            var retval = this.Get<Customer>(path, null);
-            return retval;
+            var retval = this.Get<Customer>(path);
+            return retval.FirstOrDefault();
         }
 
         public List<Customer> CreateCustomer(string data)
@@ -45,7 +52,24 @@ namespace CustomerAppBackend.ShopInterface.Shopify
             return retval;
         }
 
+        public List<Order> GetOrders(int customerId)
+        {
+            var path = String.Format("/admin/orders.json");
+            var retval = this.Get<Order>(path, String.Format("customer_id={0}", customerId));
+            return retval;
+        }
 
+        public Order GetOrder(int id)
+        {
+            var path = String.Format("/admin/orders/#{0}.json", id);
+            var retval = this.Get<Order>(path, null).FirstOrDefault();
+            return retval;
+        }
+
+        public List<T> Get<T>(string path) where T: IShopify, new()
+        {
+            return this.Get<T>(path, null);
+        }
 
         public List<T> Get<T>(string path, string data) where T: IShopify, new()
         {

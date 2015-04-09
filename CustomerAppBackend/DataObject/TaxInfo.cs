@@ -46,7 +46,7 @@ namespace CustomerAppBackend.DataObject
 
         public void LoadFromShopifyObject(IDictionary data)
         {
-            this.Price = (decimal)data["price"];
+            this.Price = Decimal.Parse(data["price"] as String);
             this.Rate = (decimal)data["rate"];
             this.Title = data["title"] as String;
         }

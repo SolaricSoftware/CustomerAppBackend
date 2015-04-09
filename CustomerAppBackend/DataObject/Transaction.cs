@@ -5,7 +5,7 @@ using System.Web.Script.Serialization;
 using System.Linq;
 
 using CustomerAppBackend.ShopInterface;
-
+using SI = CustomerAppBackend.ShopInterface;
 
 namespace CustomerAppBackend.DataObject
 {
@@ -75,7 +75,7 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public Status Status
+        public TransactionStatus Status
         {
             get;
             set;
@@ -113,14 +113,23 @@ namespace CustomerAppBackend.DataObject
             this.CreatedAt = DateTime.Parse(data["created_at"] as String);
             this.PaymentDetail = new PaymentDetail(data["payment_details"] as IDictionary);
             this.Id = (int)data["id"];
-            this.TransactionType = Enum<CustomerAppBackend.ShopInterface.TransactionType>.Parse(data["kind"] as String);
             this.OrderId = (int)data["order_id"];
             this.Receipt = new Receipt(data["receipt"] as IDictionary);
-            this.Error = Enum<CustomerAppBackend.ShopInterface.ErrorCode>.Parse(data["error_code"] as String);
-            this.Status = Enum<CustomerAppBackend.ShopInterface.Status>.Parse(data["status"] as String);
             this.Test = (bool)data["test"];
             this.UserId = (int)data["user_id"];
             this.Currency = data["currenty"] as String;
+
+            SI.TransactionType ttype;
+            Enum<TransactionType>.TryParse(data["status"] as String, out ttype);
+            this.TransactionType = ttype;
+
+            SI.ErrorCode ecode;
+            Enum<ErrorCode>.TryParse(data["status"] as String, out ecode);
+            this.Error = ecode;
+
+            TransactionStatus tstatus;
+            Enum<TransactionStatus>.TryParse(data["status"] as String, out tstatus);
+            this.Status = tstatus;
         }
 
         #endregion

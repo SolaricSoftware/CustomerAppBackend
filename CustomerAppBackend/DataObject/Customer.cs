@@ -63,6 +63,12 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
+        public Address DefaultAddress
+        {
+            get;
+            set;
+        }
+
         public List<Address> Addressess
         {
             get;
@@ -95,32 +101,13 @@ namespace CustomerAppBackend.DataObject
                 return;
 
             this.Id = (int)data["id"];
-            this.FirstName = data["first_name"].ToString();
-            this.LastName = data["last_name"].ToString();
-            this.Email = data["email"].ToString();
-            this.Note = data["note"].ToString();
+            this.FirstName = data["first_name"] as String;
+            this.LastName = data["last_name"] as String;
+            this.Email = data["email"] as String;
+            this.Note = data["note"] as String;
             this.OrderCount = (int)data["orders_count"];
-
-//            var dic = data["addresses"] as IDictionary;
-//            if (dic != null)
-//            {
-//                foreach (var key in dic.Keys)
-//                {
-//                    var address = new Address();
-//                    address.LoadFromObject(dic[key] as IDictionary);
-//                    this.Addressess.Add(address);
-//                }
-//            }
-
-            var arr = data["addresses"] as Array;
-            if (arr != null)
-            {
-                foreach (var addr in arr)
-                {
-                    var address = new Address(addr as IDictionary);
-                    this.Addressess.Add(address);
-                }
-            }
+            this.DefaultAddress = new Address(data["default_address"] as IDictionary);
+            this.Addressess = ShopInterfaceBase.Transform<Address>(data["addresses"]);
         }
     }
 }

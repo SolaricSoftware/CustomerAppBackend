@@ -30,20 +30,19 @@ namespace CustomerAppBackend.ShopInterface
     }
 
 
-    public enum Status
+    public enum ShipmentStatus
     {
-        Unknown,
+        Failure,
         Pending,
         Success,
         Cancelled,
-        Error,
-        Failure
+        Erro
     }
 
-    public enum ShipmentStatus
+    public enum OrderStatus
     {
-        Fulfilled,
         Null,
+        Fulfilled,
         Partial
     }
 
@@ -56,8 +55,17 @@ namespace CustomerAppBackend.ShopInterface
         Other
     }
 
+    public enum TransactionStatus
+    {
+        Failure,
+        Pending,
+        Success,
+        Error
+    }
+
     public enum TransactionType
     {
+        Unknown,
         Authorization,
         Capture,
         Sale,
@@ -67,6 +75,7 @@ namespace CustomerAppBackend.ShopInterface
 
     public enum ErrorCode
     {
+        Unknown,
         Incorrect_Number,
         Invalid_Number,
         Invalid_Expiry_Date,
@@ -83,6 +92,7 @@ namespace CustomerAppBackend.ShopInterface
 
     public enum DiscountCodeType
     {
+        Unknown,
         Percentage,
         Shipping,
         Fixed_Amount
@@ -128,7 +138,7 @@ namespace CustomerAppBackend.ShopInterface
                     {
                         var c = new T();
                         c.LoadFromShopifyObject(item as IDictionary);
-                        ((IList)retval).Add(item);
+                        ((IList)retval).Add(c);
                     }
                 }
             }
