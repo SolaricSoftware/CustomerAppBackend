@@ -30,6 +30,33 @@ namespace CustomerAppBackend.ShopInterface.Shopify
             return retval;
         }
 
+        public List<TaxInfo> CalculateTaxes(string countryCode, string proviceCode, decimal totalPrice)
+        {
+            var path = "/admin/countries.json";
+            var country = this.Get<CountryInfo>(path).FirstOrDefault(x => x.Code == countryCode);
+            var provice = country.Provinces.FirstOrDefault(x => x.Code == proviceCode);
+
+            var retval = new List<TaxInfo>();
+            if (country.Tax > 0)
+            {
+                retval.Add(new TaxInfo
+                    {
+                        Rate = country.Tax,
+                        Title = country.Name + " National Sales Tax",
+                        Price = Math.Round(totalPrice * country.Tax, 2)
+                    });
+            }
+
+            retval.Add(new TaxInfo
+                {
+                    Rate = provice.Tax,
+                    Title = provice.TaxName,
+                    Price = Math.Round(totalPrice * provice.Tax, 2)
+                });
+
+            return retval;
+        }
+
         public Customer GetCustomer(string email)
         {
             var path = "/admin/customers/search.json";
@@ -62,7 +89,20 @@ namespace CustomerAppBackend.ShopInterface.Shopify
         public Order GetOrder(int id)
         {
             var path = String.Format("/admin/orders/#{0}.json", id);
-            var retval = this.Get<Order>(path, null).FirstOrDefault();
+            var retval = this.Get<Order>(path).FirstOrDefault();
+            return retval;
+        }
+
+        public void CreateOrder(Order order)
+        {
+            var path = "/admin/order.json";
+            var retval = this.Post<Order>(path, order);
+        }
+
+        public List<Product> GetProducts()
+        {
+            var path = "/admin/products.json";
+            var retval = this.Get<Product>(path);
             return retval;
         }
 

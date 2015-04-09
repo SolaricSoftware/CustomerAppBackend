@@ -36,7 +36,7 @@ namespace CustomerAppBackend.ShopInterface
         Pending,
         Success,
         Cancelled,
-        Erro
+        Error
     }
 
     public enum OrderStatus

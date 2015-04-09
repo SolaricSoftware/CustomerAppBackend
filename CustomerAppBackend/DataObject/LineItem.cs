@@ -38,7 +38,7 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public string FulfillmentStatus
+        public OrderStatus FulfillmentStatus
         {
             get;
             set;
@@ -137,7 +137,6 @@ namespace CustomerAppBackend.DataObject
             this.Id = (int)data["id"];
             this.FulfillableQuantity = (int)data["fulfillable_quantity"];
             this.FulfillmentService = data["fulfillment_service"] as String;
-            this.FulfillmentStatus = data["fulfillment_status"] as String;
             this.Grams = (int)data["grams"];
             this.Price = Decimal.Parse(data["price"] as String);
             this.ProductId = (int)data["product_id"];
@@ -151,6 +150,10 @@ namespace CustomerAppBackend.DataObject
             this.Name = data["name"] as String;
             this.ProductExists = (bool)data["product_exists"];
             this.Properites = data["properties"] as List<String>;
+
+            OrderStatus ostatus;
+            Enum<OrderStatus>.TryParse(data["fulfillment_status"] as String, out ostatus);
+            this.FulfillmentStatus = ostatus;
         }
 
         #endregion

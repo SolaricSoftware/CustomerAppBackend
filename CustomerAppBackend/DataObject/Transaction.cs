@@ -120,7 +120,7 @@ namespace CustomerAppBackend.DataObject
             this.Currency = data["currenty"] as String;
 
             SI.TransactionType ttype;
-            Enum<TransactionType>.TryParse(data["status"] as String, out ttype);
+            Enum<TransactionType>.TryParse(data["kind"] as String, out ttype);
             this.TransactionType = ttype;
 
             SI.ErrorCode ecode;

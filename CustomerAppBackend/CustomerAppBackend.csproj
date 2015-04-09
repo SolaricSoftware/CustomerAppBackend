@@ -110,6 +110,11 @@
     <Compile Include="DataObject\ShippingMethod.cs" />
     <Compile Include="DataObject\DiscountCode.cs" />
     <Compile Include="DataObject\TaxInfo.cs" />
+    <Compile Include="DataObject\Product.cs" />
+    <Compile Include="DataObject\ProductVariant.cs" />
+    <Compile Include="DataObject\ProductImage.cs" />
+    <Compile Include="DataObject\ProvinceInfo.cs" />
+    <Compile Include="DataObject\CountryInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />

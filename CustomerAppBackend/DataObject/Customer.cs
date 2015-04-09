@@ -78,18 +78,24 @@ namespace CustomerAppBackend.DataObject
 
         public string ToShopifyJson()
         {
-            var data = new {
+            dynamic data = new {
                 customer = new {
                     first_name = this.FirstName,
                     last_name = this.LastName,
                     email = this.Email,
                     verified_email = true,
                     addresses = this.Addressess,
-                    password = this.Password,
-                    password_confirmation = this.Password,
-                    send_emnail_welcome = false
+//                    password = this.Password,
+//                    password_confirmation = this.Password,
+                    send_email_welcome = false
                 }
             };
+
+            if (this.Password != null)
+            {
+                data.customer.password = this.Password;
+                data.customer.password_confirmation = this.Password;
+            }
                    
             var retval = (new JavaScriptSerializer()).Serialize(data);
             return retval;
@@ -108,7 +114,7 @@ namespace CustomerAppBackend.DataObject
             this.OrderCount = (int)data["orders_count"];
             this.DefaultAddress = new Address(data["default_address"] as IDictionary);
             this.Addressess = ShopInterfaceBase.Transform<Address>(data["addresses"]);
-        }
+        }   
     }
 }
 

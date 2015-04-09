@@ -227,11 +227,38 @@ namespace CustomerAppBackend.Controllers
 //            };
 
             var api = new Shopify();
-            //var customer = api.GetCustomer("olan.hall@icloud.com");
+            var customer = api.GetCustomer("olan.hall@icloud.com");
             //var orders = api.GetOrders(customer.Id);
             //var customers = api.SearchCustomer("default_address.zip:12345");
+            var products = api.GetProducts();
 
 
+
+            var lineItem = new LineItem()
+            {
+                Id = products[0].Variants[3].Id,
+                Quantity = 1
+            };
+
+            var transaction = new Transaction()
+            {
+                TransactionType = CustomerAppBackend.ShopInterface.TransactionType.Sale,
+                Status = CustomerAppBackend.ShopInterface.TransactionStatus.Success,
+                Amount = products[0].Variants[3].Price
+            };
+
+            var taxes = api.CalculateTaxes(customer.DefaultAddress.Country, customer.DefaultAddress.State, products[0].Variants[3].Price);
+            var totalTaxes = taxes.Sum(x => x.Price);
+
+            var order = new Order()
+            {
+                    Customer = customer,
+                    BillingAddress = customer.DefaultAddress,
+                    ShippingAddress = customer.DefaultAddress,
+                    Taxes = taxes,
+                    Transactions = new List<Transaction>() { transaction },
+                    Email = customer.Email
+            };
 
 //            var a = 1 + 1;
         }

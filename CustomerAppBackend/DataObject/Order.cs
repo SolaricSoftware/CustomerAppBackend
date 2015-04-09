@@ -140,11 +140,11 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public PaymentDetail PaymentDetails
-        {
-            get;
-            set;
-        }
+//        public PaymentDetail PaymentDetails
+//        {
+//            get;
+//            set;
+//        }
 
         public DateTime ProcessedAt
         {
@@ -229,11 +229,30 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
+        public List<Transaction> Transactions
+        {
+            get;
+            set;
+        }
+
         #region IShopify implementation
 
         public string ToShopifyJson()
         {
-            throw new NotImplementedException();
+            var data = new {
+                order = new {
+                    line_items = this.LineItems,
+                    transactions = this.Transactions,
+                    customer = this.Customer,
+                    billing_address = this.BillingAddress,
+                    shipping_address = this.ShippingAddress,
+                    email = this.Email,
+                    financial_status = this.FinancialStatus.ToString().ToLower()
+                }
+            };
+
+            var retval = (new JavaScriptSerializer()).Serialize(data);
+            return retval;
         }
 
         public void LoadFromShopifyObject(IDictionary data)
@@ -251,7 +270,6 @@ namespace CustomerAppBackend.DataObject
             this.Note = data["note"] as String;
             this.NumericalIdentifier = (int)data["number"];
             this.OrderNumber = (int)data["order_number"];
-            this.PaymentDetails = new PaymentDetail(data["payment_details"] as IDictionary);
             this.Subtotal = Decimal.Parse(data["subtotal_price"] as String);
             this.TaxesIncluded = (bool)data["taxes_included"];
             this.Token = data["token"] as String;
@@ -285,6 +303,7 @@ namespace CustomerAppBackend.DataObject
             this.Refunds = ShopInterfaceBase.Transform<Refund>(data["refund"]);
             this.Taxes = ShopInterfaceBase.Transform<TaxInfo>(data["tax_lines"]);
             this.ShippingMethods = ShopInterfaceBase.Transform<ShippingMethod>(data["shipping_lines"]);
+            this.Transactions = ShopInterfaceBase.Transform<Transaction>(data["transactions"]);
         }
 
         #endregion
