@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CustomerAppBackend.Data
+namespace CustomerAppBackend.DataObject
 {
     public class DataWrapper<T>
     {

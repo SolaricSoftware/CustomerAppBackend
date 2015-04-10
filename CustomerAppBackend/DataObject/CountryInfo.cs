@@ -43,6 +43,12 @@ namespace CustomerAppBackend.DataObject
             get;
             set;
         }
+
+        public string TaxName
+        {
+            get;
+            set;
+        }
             
         #region IShopify implementation
 
@@ -57,6 +63,7 @@ namespace CustomerAppBackend.DataObject
             this.Name = data["name"] as String;
             this.Provinces = ShopInterfaceBase.Transform<ProvinceInfo>(data["provinces"]);
             this.Tax = (decimal)data["tax"];
+            this.TaxName = data["tax_name"] as String;
         }
 
         #endregion

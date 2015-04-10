@@ -8,27 +8,11 @@ using CustomerAppBackend.ShopInterface;
 
 namespace CustomerAppBackend.DataObject
 {
-    public class TaxInfo : IShopify
+    public class Policy : IShopify
     {
-        public TaxInfo()
+        public Policy()
         {
-        }
-
-        public TaxInfo(IDictionary data)
-        {
-            this.LoadFromShopifyObject(data);
-        }
-
-        public decimal Price
-        {
-            get;
-            set;
-        }
-
-        public decimal Rate
-        {
-            get;
-            set;
+            
         }
 
         public string Title
@@ -37,25 +21,36 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
+        public string Text
+        {
+            get;
+            set;
+        }
+
+        public string Url
+        {
+            get;
+            set;
+        }
+
+        public Policy(IDictionary data) 
+            : this()
+        {
+            this.LoadFromShopifyObject(data);
+        }
+
         #region IShopify implementation
 
         public string ToShopifyJson()
         {
-            var data = new {
-                price = this.Price,
-                rate = this.Rate,
-                title = this.Title
-            };
-
-            var retval = Helper.Serialize(data);
-            return retval;
+            throw new NotImplementedException();
         }
 
         public void LoadFromShopifyObject(IDictionary data)
         {
-            this.Price = Decimal.Parse(data["price"] as String);
-            this.Rate = (decimal)data["rate"];
             this.Title = data["title"] as String;
+            this.Text = data["body"] as String;
+            this.Url = data["url"] as String;
         }
 
         #endregion

@@ -41,7 +41,7 @@ namespace CustomerAppBackend.DataObject
                 }
             };
 
-            var retval = (new JavaScriptSerializer()).Serialize(data);
+            var retval = Helper.Serialize(data);
             return retval;
         }
 

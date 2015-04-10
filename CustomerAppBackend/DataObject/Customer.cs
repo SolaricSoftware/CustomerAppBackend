@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Web.Script.Serialization;
 using System.Linq;
+using System.Dynamic;
 
 using CustomerAppBackend.ShopInterface;
 
@@ -74,30 +75,30 @@ namespace CustomerAppBackend.DataObject
             get;
             set;
         }
-
-
+            
         public string ToShopifyJson()
         {
-            dynamic data = new {
-                customer = new {
-                    first_name = this.FirstName,
-                    last_name = this.LastName,
-                    email = this.Email,
-                    verified_email = true,
-                    addresses = this.Addressess,
-//                    password = this.Password,
-//                    password_confirmation = this.Password,
-                    send_email_welcome = false
-                }
-            };
+            dynamic data = new ExpandoObject();
+
+            if(this.Id > 0)
+                data.id = this.Id;
+
+            if(!String.IsNullOrWhiteSpace(this.FirstName))
+                data.first_name = this.FirstName;
+
+            if (!String.IsNullOrWhiteSpace(this.LastName))
+                data.last_name = this.LastName;
+
+            if (!String.IsNullOrWhiteSpace(this.Email))
+                data.email = this.Email;
 
             if (this.Password != null)
             {
-                data.customer.password = this.Password;
-                data.customer.password_confirmation = this.Password;
+                data.password = this.Password;
+                data.password_confirmation = this.Password;
             }
                    
-            var retval = (new JavaScriptSerializer()).Serialize(data);
+            var retval = Helper.Serialize(data);
             return retval;
         }
 

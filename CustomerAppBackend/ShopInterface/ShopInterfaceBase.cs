@@ -153,7 +153,7 @@ namespace CustomerAppBackend.ShopInterface
 
         protected string Serialize(object data)
         {
-            return (new JavaScriptSerializer()).Serialize(data);
+            return (new JavaScriptSerializer()).Serialize(data).Replace("\"[", "[").Replace("\\\"", "\"").Replace("]\"", "]").Replace("\"{", "{").Replace("}\"", "}");
         }
     }
 }

@@ -16,6 +16,9 @@ namespace CustomerAppBackend.Controllers
 {
     public class ApiController : Controller
     {
+
+        private JsonRequestBehavior _requestBehavior = JsonRequestBehavior.AllowGet;
+
         public ActionResult Index()
         {
             return View ();
@@ -180,28 +183,166 @@ namespace CustomerAppBackend.Controllers
 //            return Json(retval, JsonRequestBehavior.AllowGet);
 //        }
 
+        [HttpPost]
         public JsonResult CreateCustomer()
         {
-            var data = Request["customer"];
-            var api = new Shopify();
-            var retval = api.CreateCustomer(data).FirstOrDefault();
-            return Json(retval);
+            var retval = new DataWrapper<Customer>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            try
+            {
+                var data = Request["customer"];
+                var api = new Shopify();
+                retval.Data = api.CreateCustomer(data).FirstOrDefault();
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
         }
 
         public JsonResult GetCustomer()
         {
-            var email = Request["email"];
-            var api = new Shopify();
-            var retval = api.GetCustomer(email);
-            return Json(retval);
+            var retval = new DataWrapper<Customer>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            try
+            {
+                var email = Request["email"];
+                var api = new Shopify();
+                retval.Data = api.GetCustomer(email);
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
         }
 
         public JsonResult GetOrders()
         {
-            var customerId = Int32.Parse(Request["customerId"]);
-            var api = new Shopify();
-            var retval = api.GetOrders(customerId);
-            return Json(retval);
+            var retval = new DataWrapper<List<Order>>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            try
+            {
+                var customerId = Int32.Parse(Request["customerId"]);
+                var api = new Shopify();
+                retval.Data = api.GetOrders(customerId);
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
+        public JsonResult GetOrder()
+        {
+            var retval = new DataWrapper<Order>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            try
+            {
+                var orderId = Int32.Parse(Request["orderId"]);
+                var api = new Shopify();
+                retval.Data = api.GetOrder(orderId);
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
+        [HttpPost]
+        public JsonResult CreateOrder()
+        {
+            var data = Request["order"]; 
+            var wrapper = new DataWrapper<Order>();
+
+            return Json(wrapper);
+        }
+
+        public JsonResult GetPolicy()
+        {
+            var retval = new DataWrapper<Policy>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            try
+            {
+                var api = new Shopify();
+                retval.Data = api.GetPolicy();
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
+        public JsonResult GetLocations()
+        {
+            var retval = new DataWrapper<List<Location>>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            try
+            {
+                var api = new Shopify();
+                retval.Data = api.GetLocations();
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
+        public JsonResult GetLocation()
+        {
+            var retval = new DataWrapper<Location>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            try
+            {
+                var locationId = Int32.Parse(Request["locationId"]);
+                var api = new Shopify();
+                retval.Data = api.GetLocation(locationId);
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
         }
             
         public void StoreTest() {
@@ -227,40 +368,68 @@ namespace CustomerAppBackend.Controllers
 //            };
 
             var api = new Shopify();
-            var customer = api.GetCustomer("olan.hall@icloud.com");
-            //var orders = api.GetOrders(customer.Id);
-            //var customers = api.SearchCustomer("default_address.zip:12345");
-            var products = api.GetProducts();
+//            var customer = api.GetCustomer("olan.hall@icloud.com");
+//            //var orders = api.GetOrders(customer.Id);
+//            //var customers = api.SearchCustomer("default_address.zip:12345");
+//            var products = api.GetProducts();
+//
+//            var prod = products[0].Variants[3];
+//            var lineItem = new LineItem()
+//            {
+//                VariantId = prod.Id,
+//                Quantity = 1,
+//                Title = prod.Title,
+//                Price = prod.Price
+//            };
+//
+//            var taxes = api.CalculateTaxes(customer.DefaultAddress.CountryCode, customer.DefaultAddress.StateCode, products[0].Variants[3].Price);
+//            var totalTax = taxes.Sum(x => x.Price);
+//            var cus = new Customer
+//            {
+//                Id = customer.Id
+//            };
+//            
+//            var transaction = new Transaction()
+//            {
+//                TransactionType = CustomerAppBackend.ShopInterface.TransactionType.Sale,
+//                Status = CustomerAppBackend.ShopInterface.TransactionStatus.Success,
+//                Amount = prod.Price + totalTax
+//            };
+//                        
+//            var order = new Order()
+//            {
+//                    LineItems = new List<LineItem> { lineItem },
+//                    Customer = cus,
+//                    BillingAddress = customer.DefaultAddress,
+//                    ShippingAddress = customer.DefaultAddress,
+//                    Taxes = taxes,
+//                    Transactions = new List<Transaction> { transaction },
+//                    Email = customer.Email,
+//                    TotalTax = totalTax,
+//                    FinancialStatus = CustomerAppBackend.ShopInterface.FinancialStatus.Paid,
+//                    Currency = "USD"
+//            };
+//
+//            var wrapper = new DataWrapper<Order>();
+//
+//            try
+//            {
+//                wrapper.Data = api.CreateOrder(order);
+//            }
+//            catch (WebException ex)
+//            {
+//                wrapper.Error = ex.Message;
+//                
+//                var aaa = 1 + 1;
+//            }
+//            catch(Exception ex)
+//            {
+//                wrapper.Error = ex.Message;
+//                var bbb = 1 + 1;
+//            }
 
 
-
-            var lineItem = new LineItem()
-            {
-                Id = products[0].Variants[3].Id,
-                Quantity = 1
-            };
-
-            var transaction = new Transaction()
-            {
-                TransactionType = CustomerAppBackend.ShopInterface.TransactionType.Sale,
-                Status = CustomerAppBackend.ShopInterface.TransactionStatus.Success,
-                Amount = products[0].Variants[3].Price
-            };
-
-            var taxes = api.CalculateTaxes(customer.DefaultAddress.Country, customer.DefaultAddress.State, products[0].Variants[3].Price);
-            var totalTaxes = taxes.Sum(x => x.Price);
-
-            var order = new Order()
-            {
-                    Customer = customer,
-                    BillingAddress = customer.DefaultAddress,
-                    ShippingAddress = customer.DefaultAddress,
-                    Taxes = taxes,
-                    Transactions = new List<Transaction>() { transaction },
-                    Email = customer.Email
-            };
-
-//            var a = 1 + 1;
+            var a = 1 + 1;
         }
     }
 }

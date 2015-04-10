@@ -42,7 +42,7 @@ namespace CustomerAppBackend.ShopInterface.Shopify
                 retval.Add(new TaxInfo
                     {
                         Rate = country.Tax,
-                        Title = country.Name + " National Sales Tax",
+                        Title = country.TaxName,
                         Price = Math.Round(totalPrice * country.Tax, 2)
                     });
             }
@@ -60,15 +60,15 @@ namespace CustomerAppBackend.ShopInterface.Shopify
         public Customer GetCustomer(string email)
         {
             var path = "/admin/customers/search.json";
-            var retval = this.Get<Customer>(path, String.Format("query= email:{0}", email));
-            return retval.FirstOrDefault();
+            var retval = this.Get<Customer>(path, String.Format("query= email:{0}", email)).FirstOrDefault();
+            return retval;
         }
 
         public Customer GetCustomer(int id)
         {
             var path= String.Format("/admin/customers/#{0}.json", id);
-            var retval = this.Get<Customer>(path);
-            return retval.FirstOrDefault();
+            var retval = this.Get<Customer>(path).FirstOrDefault();
+            return retval;
         }
 
         public List<Customer> CreateCustomer(string data)
@@ -93,16 +93,45 @@ namespace CustomerAppBackend.ShopInterface.Shopify
             return retval;
         }
 
-        public void CreateOrder(Order order)
+        public Order CreateOrder(Order order)
         {
-            var path = "/admin/order.json";
+            var path = "/admin/orders.json";
             var retval = this.Post<Order>(path, order);
+            return retval.FirstOrDefault();
         }
 
         public List<Product> GetProducts()
         {
             var path = "/admin/products.json";
             var retval = this.Get<Product>(path);
+            return retval;
+        }
+
+        public Product GetProduct(int id)
+        {
+            var path = String.Format("/admin/products/#{id}.json", id);
+            var retval = this.Get<Product>(path).FirstOrDefault();
+            return retval;
+        }
+
+        public Policy GetPolicy()
+        {
+            var path = "/admin/policies.json";
+            var retval = this.Get<Policy>(path).FirstOrDefault();
+            return retval;
+        }
+
+        public List<Location> GetLocations()
+        {
+            var path = "/admin/locations.json";
+            var retval = this.Get<Location>(path);
+            return retval;
+        }
+
+        public Location GetLocation(int id)
+        {
+            var path = String.Format("/admin/locations/#{id}.json", id);
+            var retval = this.Get<Location>(path).FirstOrDefault();
             return retval;
         }
 
@@ -150,47 +179,36 @@ namespace CustomerAppBackend.ShopInterface.Shopify
             return retval;
         }
 
-        public object Post(string path, IShopify data) {
+        public object Post(string path, IShopify data) 
+        {
+            string result = null;
+
             var url = String.Format("https://{0}.myshopify.com/{1}", this._shopName, path);
             var request = WebRequest.Create(url) as HttpWebRequest;
             request.ContentType = "application/json";
+            request.Accept = "application/json";
             request.Method = "POST";
             request.Credentials = new NetworkCredential(this._apiKey, this._password);
 
             var postData = data.ToShopifyJson();
-//            try
-//            {
-                using (var writer = new StreamWriter(request.GetRequestStream()))
-                {
-                    writer.Write(postData);
-                    writer.Close();
-                }
-//            }
-//            catch(Exception ex)
-//            {
-//                var aaa = 1 + 1;
-//            }
+            using (var writer = new StreamWriter(request.GetRequestStream()))
+            {
+                writer.Write(postData);
+                writer.Close();
+            }
+                
+            var response = request.GetResponse() as HttpWebResponse;
 
-            string result = null;
-//            try
-//            {
-                var response = request.GetResponse() as HttpWebResponse;
-
-                using (Stream stream = response.GetResponseStream())
-                {
-                    StreamReader sr = new StreamReader(stream);
-                    result = sr.ReadToEnd();
-                    sr.Close();
-                }
-//            }   
-//            catch(Exception ex)
-//            {
-//                var bbb = 1 + 1;
-//            }
+            using (Stream stream = response.GetResponseStream())
+            {
+                StreamReader sr = new StreamReader(stream);
+                result = sr.ReadToEnd();
+                sr.Close();
+            }
 
             if (String.IsNullOrWhiteSpace(result))
-                return null;
-        
+                    return null;
+            
             var obj = (new JavaScriptSerializer()).DeserializeObject(result);
             return obj;
         }

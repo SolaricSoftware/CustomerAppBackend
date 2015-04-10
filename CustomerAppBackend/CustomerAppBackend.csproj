@@ -90,7 +90,6 @@
     <Compile Include="DataObject\AppCustomerItemSaleDao.cs" />
     <Compile Include="DataObject\AppCustomerItemFeaturedDao.cs" />
     <Compile Include="Controllers\ApiController.cs" />
-    <Compile Include="Data\DataWrapper.cs" />
     <Compile Include="DataObject\AppCustomerItemCategoryDao.cs" />
     <Compile Include="DataObject\Customer.cs" />
     <Compile Include="DataObject\Address.cs" />
@@ -115,6 +114,11 @@
     <Compile Include="DataObject\ProductImage.cs" />
     <Compile Include="DataObject\ProvinceInfo.cs" />
     <Compile Include="DataObject\CountryInfo.cs" />
+    <Compile Include="DataObject\Helper.cs" />
+    <Compile Include="DataObject\DataWrapper.cs" />
+    <Compile Include="DataObject\Policy.cs" />
+    <Compile Include="DataObject\Location.cs" />
+    <Compile Include="DataObject\Credentials.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />

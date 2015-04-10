@@ -103,7 +103,16 @@ namespace CustomerAppBackend.DataObject
 
         public string ToShopifyJson()
         {
-            throw new NotImplementedException();
+            var data = new {
+                amount = this.Amount,
+                //authorization = this.Authorization,
+                //source_name = "iOS App",
+                kind = this.TransactionType.ToString().ToLower(),
+                status = this.Status.ToString().ToLower()
+            };
+
+            var retval = Helper.Serialize(data);
+            return retval;
         }
 
         public void LoadFromShopifyObject(IDictionary data)

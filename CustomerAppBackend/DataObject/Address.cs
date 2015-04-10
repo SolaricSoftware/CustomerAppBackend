@@ -51,6 +51,12 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
+        public string StateCode
+        {
+            get;
+            set;
+        }
+
         public string Zip
         {
             get;
@@ -58,6 +64,12 @@ namespace CustomerAppBackend.DataObject
         }
             
         public string Country
+        {
+            get;
+            set;
+        }
+
+        public string CountryCode
         {
             get;
             set;
@@ -113,7 +125,7 @@ namespace CustomerAppBackend.DataObject
                 phone = this.Phone
             };
 
-            var retval = (new JavaScriptSerializer()).Serialize(data);
+            var retval = Helper.Serialize(data);
             return retval;
         }
 
@@ -127,8 +139,10 @@ namespace CustomerAppBackend.DataObject
             this.Address2 = data["address2"] as String;
             this.City = data["city"] as String;
             this.State = data["province"] as String;
+            this.StateCode = data["province_code"] as String;
             this.Zip = data["zip"] as String;
             this.Country = data["country"] as String;
+            this.CountryCode = data["country_code"] as String;
             this.Phone = data["phone"] as String;
             this.FirstName = data["first_name"] as String;
             this.LastName = data["last_name"] as String;

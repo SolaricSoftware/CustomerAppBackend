@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Web.Script.Serialization;
 using System.Linq;
+using System.Dynamic;
 
 using CustomerAppBackend.ShopInterface;
 using SI = CustomerAppBackend.ShopInterface;
@@ -239,19 +240,43 @@ namespace CustomerAppBackend.DataObject
 
         public string ToShopifyJson()
         {
-            var data = new {
-                order = new {
-                    line_items = this.LineItems,
-                    transactions = this.Transactions,
-                    customer = this.Customer,
-                    billing_address = this.BillingAddress,
-                    shipping_address = this.ShippingAddress,
-                    email = this.Email,
-                    financial_status = this.FinancialStatus.ToString().ToLower()
-                }
-            };
+            dynamic data = new ExpandoObject();
+            data.order = new ExpandoObject();
 
-            var retval = (new JavaScriptSerializer()).Serialize(data);
+            if (!String.IsNullOrWhiteSpace(this.Email))
+            {
+                data.order.email = this.Email;
+                data.order.send_receipt = true;
+            }
+
+            if (this.TotalTax > 0)
+                data.order.total_tax = this.TotalTax;
+
+            if (!String.IsNullOrWhiteSpace(this.Currency))
+                data.order.currency = this.Currency;
+
+            if (this.FinancialStatus != FinancialStatus.Unknown)
+                data.order.financial_status = this.FinancialStatus.ToString().ToLower();
+
+            if (this.Customer != null)
+                data.order.customer = this.Customer.ToShopifyJson();
+
+            if (this.LineItems != null)
+                data.order.line_items = this.LineItems.ToShopifyJson();
+
+            if (this.Transactions != null)
+                data.order.transactions = this.Transactions.ToShopifyJson();
+
+            if (this.BillingAddress != null)
+                data.order.billing_address = this.BillingAddress.ToShopifyJson();
+
+            if (this.ShippingAddress != null)
+                data.order.shipping_address = this.ShippingAddress.ToShopifyJson();
+
+            if (this.Taxes != null)
+                data.order.tax_lines = this.Taxes.ToShopifyJson();
+
+            var retval = Helper.Serialize(data);
             return retval;
         }
 

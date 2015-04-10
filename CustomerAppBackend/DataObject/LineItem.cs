@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Web.Script.Serialization;
 using System.Linq;
+using System.Dynamic;
 
 using CustomerAppBackend.ShopInterface;
 
@@ -126,7 +127,19 @@ namespace CustomerAppBackend.DataObject
 
         public string ToShopifyJson()
         {
-            throw new NotImplementedException();
+            dynamic data = new ExpandoObject();
+
+            data.variant_id = this.VariantId;
+            data.quantity = this.Quantity;
+
+            if (!String.IsNullOrWhiteSpace(this.Title))
+                data.title = this.Title;
+
+            if (this.Price > 0)
+                data.price = this.Price;
+
+            var retval = Helper.Serialize(data);
+            return retval;
         }
 
         public void LoadFromShopifyObject(IDictionary data)
