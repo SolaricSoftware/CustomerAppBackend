@@ -6,15 +6,15 @@ using System.Linq;
 
 using CustomerAppBackend.ShopInterface;
 
-namespace CustomerAppBackend.DataObject
+namespace CustomerAppBackend
 {
-    public class Product : IShopify
+    public class Category : IShopify
     {
-        public Product()
+        public Category()
         {
         }
 
-        public Product(IDictionary data)
+        public Category(IDictionary data)
             : this()
         {
             this.LoadFromShopifyObject(data);
@@ -37,44 +37,20 @@ namespace CustomerAppBackend.DataObject
             get;
             set;
         }
+
+        public string SortOrder
+        {
+            get;
+            set;
+        }
             
-        public List<ProductImage> Images
-        {
-            get;
-            set;
-        }
-
-        public Dictionary<string,string> Options
-        {
-            get;
-            set;
-        }
-
-//        public string Category
-//        {
-//            get;
-//            set;
-//        }
-
-        public string Tags
-        {
-            get;
-            set;
-        }
-
         public string Title
         {
             get;
             set;
         }
 
-        public List<ProductVariant> Variants 
-        {
-            get;
-            set;
-        }
-
-        public string Vendor
+        public string ImageUrl
         {
             get;
             set;
@@ -92,13 +68,13 @@ namespace CustomerAppBackend.DataObject
             this.Id = (int)data["id"];
             this.Description = data["body_html"] as String ?? String.Empty;
             this.Name = data["handle"] as String ?? String.Empty;
-            this.Images = ShopInterfaceBase.Transform<ProductImage>(data["images"]);
-            this.Options = data["options"] as Dictionary<string, string> ?? new Dictionary<string, string>();
-            //this.Category = data["product_type"] as String ?? String.Empty;
-            this.Tags = data["tags"] as String ?? String.Empty;
+            this.SortOrder = data["sort_order"] as String ?? String.Empty;
             this.Title = data["title"] as String ?? String.Empty;
-            this.Variants = ShopInterfaceBase.Transform<ProductVariant>(data["variants"]);
-            this.Vendor = data["vendor"] as String ?? String.Empty;
+
+            if (data["image"] != null)
+                this.ImageUrl = (data["image"] as IDictionary)["src"] as String ?? String.Empty;
+            else
+                this.ImageUrl = String.Empty;
         }
 
         #endregion

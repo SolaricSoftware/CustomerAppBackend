@@ -32,16 +32,10 @@ namespace CustomerAppBackend.Controllers
                     Data = false
                 };
                       
-            Guid accessKey;
-            if (Guid.TryParse(Request["accessKey"], out accessKey))
-            {
-                var db = new DataAccess();
-                retval.Data = db.AppCustomers.Any(x => x.AccessKey == accessKey && x.Active == true);
-            }
-            else
-            {
-                retval.Error = "Access Key is missing or invalid.";
-            }
+            string error;
+            var db = new DataAccess();
+            retval.Data = db.CanAccess(Request["accessKey"], out error);
+            retval.Error = error;
 
             return Json(retval, JsonRequestBehavior.AllowGet);
         }
@@ -333,9 +327,112 @@ namespace CustomerAppBackend.Controllers
 
             try
             {
-                var locationId = Int32.Parse(Request["locationId"]);
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(Request["accessKey"], out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var locationId = Int32.Parse(Request["locationId"]);
+                    var api = new Shopify();
+                    retval.Data = api.GetLocation(locationId);
+                }
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
+        public JsonResult GetCategories()
+        {
+            var retval = new DataWrapper<List<Category>>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            try
+            {
                 var api = new Shopify();
-                retval.Data = api.GetLocation(locationId);
+                retval.Data = api.GetCategories();
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
+        public JsonResult GetProducts()
+        {
+            var retval = new DataWrapper<List<Product>>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            try
+            {
+                var api = new Shopify();
+                retval.Data = api.GetProducts();
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
+        public JsonResult GetProduct()
+        {
+            var retval = new DataWrapper<Product>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            try
+            {
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(Request["accessKey"], out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var productId = Int32.Parse(Request["productId"]);
+                    var api = new Shopify();
+                    retval.Data = api.GetProduct(productId);
+                }
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
+        public JsonResult GetFeaturedProducts()
+        {
+            var retval = new DataWrapper<List<Product>>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            try
+            {
+                //TODO: Get freatured categoy name from database if one is availabe.
+
+                var api = new Shopify();
+                retval.Data = api.GetFeaturedProducts();
             }
             catch(Exception ex)
             {
@@ -368,66 +465,8 @@ namespace CustomerAppBackend.Controllers
 //            };
 
             var api = new Shopify();
-//            var customer = api.GetCustomer("olan.hall@icloud.com");
-//            //var orders = api.GetOrders(customer.Id);
-//            //var customers = api.SearchCustomer("default_address.zip:12345");
-//            var products = api.GetProducts();
-//
-//            var prod = products[0].Variants[3];
-//            var lineItem = new LineItem()
-//            {
-//                VariantId = prod.Id,
-//                Quantity = 1,
-//                Title = prod.Title,
-//                Price = prod.Price
-//            };
-//
-//            var taxes = api.CalculateTaxes(customer.DefaultAddress.CountryCode, customer.DefaultAddress.StateCode, products[0].Variants[3].Price);
-//            var totalTax = taxes.Sum(x => x.Price);
-//            var cus = new Customer
-//            {
-//                Id = customer.Id
-//            };
-//            
-//            var transaction = new Transaction()
-//            {
-//                TransactionType = CustomerAppBackend.ShopInterface.TransactionType.Sale,
-//                Status = CustomerAppBackend.ShopInterface.TransactionStatus.Success,
-//                Amount = prod.Price + totalTax
-//            };
-//                        
-//            var order = new Order()
-//            {
-//                    LineItems = new List<LineItem> { lineItem },
-//                    Customer = cus,
-//                    BillingAddress = customer.DefaultAddress,
-//                    ShippingAddress = customer.DefaultAddress,
-//                    Taxes = taxes,
-//                    Transactions = new List<Transaction> { transaction },
-//                    Email = customer.Email,
-//                    TotalTax = totalTax,
-//                    FinancialStatus = CustomerAppBackend.ShopInterface.FinancialStatus.Paid,
-//                    Currency = "USD"
-//            };
-//
-//            var wrapper = new DataWrapper<Order>();
-//
-//            try
-//            {
-//                wrapper.Data = api.CreateOrder(order);
-//            }
-//            catch (WebException ex)
-//            {
-//                wrapper.Error = ex.Message;
-//                
-//                var aaa = 1 + 1;
-//            }
-//            catch(Exception ex)
-//            {
-//                wrapper.Error = ex.Message;
-//                var bbb = 1 + 1;
-//            }
 
+            var products = api.GetFeaturedProducts();
 
             var a = 1 + 1;
         }

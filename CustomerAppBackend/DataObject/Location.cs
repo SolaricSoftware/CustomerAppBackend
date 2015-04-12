@@ -6,7 +6,6 @@ using System.Linq;
 
 using CustomerAppBackend.ShopInterface;
 
-
 namespace CustomerAppBackend.DataObject
 {
     public class Location : IShopify
@@ -55,8 +54,7 @@ namespace CustomerAppBackend.DataObject
             set;
         }
             
-
-        public string Zip
+        public string PostalCode
         {
             get;
             set;
@@ -83,14 +81,14 @@ namespace CustomerAppBackend.DataObject
         public void LoadFromShopifyObject(IDictionary data)
         {
             this.Id = (int)data["id"];
-            this.Name = data["name"] as String;
-            this.Address1 = data["address1"] as String;
-            this.Address2 = data["address2"] as String;
-            this.City = data["city"] as String;
-            this.State = data["province"] as String;
-            this.Zip = data["zip"] as String;
-            this.Country = data["country"] as String;
-            this.Phone = data["phone"] as String;
+            this.Name = data["name"] as String ?? String.Empty;
+            this.Address1 = data["address1"] as String ?? String.Empty;
+            this.Address2 = data["address2"] as String ?? String.Empty;
+            this.City = data["city"] as String ?? String.Empty;
+            this.State = data["province"] as String ?? String.Empty;
+            this.PostalCode = data["zip"] as String ?? String.Empty;
+            this.Country = data["country"] as String ?? String.Empty;
+            this.Phone = data["phone"] as String ?? String.Empty;
         }
 
         #endregion

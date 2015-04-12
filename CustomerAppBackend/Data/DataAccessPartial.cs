@@ -12,6 +12,26 @@ namespace CustomerAppBackend.Data
 			: this ("Server=calantha.arvixe.com;Database=CustomerApp;User Id=CustomerAppUser;Password=password1;")
 		{
 		}
+
+        public bool CanAccess(string accessKey, out string error)
+        {
+            Guid ak;
+            if (Guid.TryParse(accessKey, out ak))
+            {
+                error = String.Empty;
+                return this.CanAccess(ak);
+            }
+            else
+            {
+                error = "Access Key is missing or invalid.";
+                return false;
+            }
+        }
+            
+        public bool CanAccess(Guid accessKey)
+        {
+            return this.AppCustomers.Any(x => x.AccessKey == accessKey && x.Active == true);
+        }
 	}
 }
 

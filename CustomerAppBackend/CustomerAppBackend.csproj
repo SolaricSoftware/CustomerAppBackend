@@ -119,6 +119,7 @@
     <Compile Include="DataObject\Policy.cs" />
     <Compile Include="DataObject\Location.cs" />
     <Compile Include="DataObject\Credentials.cs" />
+    <Compile Include="DataObject\Category.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />

@@ -121,6 +121,37 @@ namespace CustomerAppBackend.ShopInterface.Shopify
             return retval;
         }
 
+        public List<Category> GetCategories()
+        {
+            var path = "/admin/custom_collections.json";
+            var retval = this.Get<Category>(path);
+            return retval;
+        }
+
+
+
+        public List<Product> GetFeaturedProducts(string featuredCollectionName = "frontpage")
+        {
+            var retval = new List<Product>();
+
+            if (!String.IsNullOrWhiteSpace(featuredCollectionName))
+                featuredCollectionName = "frontpage";
+
+            var featuredCategory = this.GetCategories().FirstOrDefault(x => x.Name == featuredCollectionName);
+                
+            if (featuredCategory != null)
+            {
+                var path = "/admin/products.json";
+                retval = this.Get<Product>(path, String.Format("collection_id={0}", featuredCategory.Id));
+            }
+            else
+            {
+                throw new Exception("No freatured category was found.");
+            }
+
+            return retval;
+        }
+
         public List<Location> GetLocations()
         {
             var path = "/admin/locations.json";
