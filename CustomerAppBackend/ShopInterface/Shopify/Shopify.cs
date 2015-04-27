@@ -79,10 +79,10 @@ namespace CustomerAppBackend.ShopInterface.Shopify
             return retval;
         }
 
-        public List<Order> GetOrders(int customerId)
+        public List<Order> GetOrders(int customerId, string status = "any")
         {
             var path = String.Format("/admin/orders.json");
-            var retval = this.Get<Order>(path, String.Format("customer_id={0}", customerId));
+            var retval = this.Get<Order>(path, String.Format("customer_id={0}&status={1}", customerId, status));
             return retval;
         }
 
@@ -107,6 +107,13 @@ namespace CustomerAppBackend.ShopInterface.Shopify
             return retval;
         }
 
+        public List<Product> GetProducts(string ids)
+        {
+            var path = "/admin/products.json";
+            var retval = this.Get<Product>(path, String.Format("ids={0}", ids));
+            return retval;
+        }
+
         public Product GetProduct(int id)
         {
             var path = String.Format("/admin/products/#{id}.json", id);
@@ -127,9 +134,7 @@ namespace CustomerAppBackend.ShopInterface.Shopify
             var retval = this.Get<Category>(path);
             return retval;
         }
-
-
-
+            
         public List<Product> GetFeaturedProducts(string featuredCollectionName = "frontpage")
         {
             var retval = new List<Product>();

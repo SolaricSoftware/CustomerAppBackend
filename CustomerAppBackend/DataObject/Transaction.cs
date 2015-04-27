@@ -69,13 +69,13 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public ErrorCode Error
+        public ErrorCodeType Error
         {
             get;
             set;
         }
 
-        public TransactionStatus Status
+        public TransactionStatusType Status
         {
             get;
             set;
@@ -132,12 +132,12 @@ namespace CustomerAppBackend.DataObject
             Enum<TransactionType>.TryParse(data["kind"] as String, out ttype);
             this.TransactionType = ttype;
 
-            SI.ErrorCode ecode;
-            Enum<ErrorCode>.TryParse(data["status"] as String, out ecode);
+            SI.ErrorCodeType ecode;
+            Enum<ErrorCodeType>.TryParse(data["status"] as String, out ecode);
             this.Error = ecode;
 
-            TransactionStatus tstatus;
-            Enum<TransactionStatus>.TryParse(data["status"] as String, out tstatus);
+            TransactionStatusType tstatus;
+            Enum<TransactionStatusType>.TryParse(data["status"] as String, out tstatus);
             this.Status = tstatus;
         }
 

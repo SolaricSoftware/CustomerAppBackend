@@ -9,7 +9,7 @@ using System.Web.Script.Serialization;
 
 namespace CustomerAppBackend.ShopInterface
 {
-    public enum HttpMethods
+    public enum HttpMethodsType
     {
         GET,
         POST,
@@ -17,7 +17,7 @@ namespace CustomerAppBackend.ShopInterface
         DELETE
     }
 
-    public enum FinancialStatus
+    public enum FinancialStatusType
     {
         Unknown,
         Pending,
@@ -30,7 +30,7 @@ namespace CustomerAppBackend.ShopInterface
     }
 
 
-    public enum ShipmentStatus
+    public enum ShipmentStatusType
     {
         Failure,
         Pending,
@@ -39,14 +39,14 @@ namespace CustomerAppBackend.ShopInterface
         Error
     }
 
-    public enum OrderStatus
+    public enum OrderStatusType
     {
         Null,
         Fulfilled,
         Partial
     }
 
-    public enum CancelReason
+    public enum CancelReasonType
     {
         Unknown,
         Customer,
@@ -55,7 +55,7 @@ namespace CustomerAppBackend.ShopInterface
         Other
     }
 
-    public enum TransactionStatus
+    public enum TransactionStatusType
     {
         Failure,
         Pending,
@@ -73,7 +73,7 @@ namespace CustomerAppBackend.ShopInterface
         Refund
     }
 
-    public enum ErrorCode
+    public enum ErrorCodeType
     {
         Unknown,
         Incorrect_Number,

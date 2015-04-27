@@ -39,7 +39,7 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public OrderStatus FulfillmentStatus
+        public OrderStatusType FulfillmentStatus
         {
             get;
             set;
@@ -164,8 +164,8 @@ namespace CustomerAppBackend.DataObject
             this.ProductExists = (bool)data["product_exists"];
             this.Properites = data["properties"] as List<String>;
 
-            OrderStatus ostatus;
-            Enum<OrderStatus>.TryParse(data["fulfillment_status"] as String, out ostatus);
+            OrderStatusType ostatus;
+            Enum<OrderStatusType>.TryParse(data["fulfillment_status"] as String, out ostatus);
             this.FulfillmentStatus = ostatus;
         }
 

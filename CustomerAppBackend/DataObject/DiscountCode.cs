@@ -31,7 +31,7 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public DiscountCodeType DiscountCodeType
+        public DiscountCodeType CodeType
         {
             get;
             set;
@@ -48,7 +48,7 @@ namespace CustomerAppBackend.DataObject
         {
             this.Amount = (decimal)data["amount"];
             this.Code = data["code"] as String;
-            this.DiscountCodeType = Enum<CustomerAppBackend.ShopInterface.DiscountCodeType>.Parse(data["type"] as String);
+            this.CodeType = Enum<CustomerAppBackend.ShopInterface.DiscountCodeType>.Parse(data["type"] as String);
         }
 
         #endregion

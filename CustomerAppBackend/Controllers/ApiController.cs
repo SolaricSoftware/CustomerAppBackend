@@ -375,11 +375,15 @@ namespace CustomerAppBackend.Controllers
                     Error = String.Empty,
                     Data = null
                 };
-
+                        
             try
             {
                 var api = new Shopify();
-                retval.Data = api.GetProducts();
+
+                if(Request["ids"] == null)
+                    retval.Data = api.GetProducts();
+                else
+                    retval.Data = api.GetProducts(Request["ids"]);
             }
             catch(Exception ex)
             {

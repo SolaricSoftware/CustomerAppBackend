@@ -52,7 +52,7 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public ShipmentStatus Status
+        public ShipmentStatusType Status
         {
             get;
             set;
@@ -100,8 +100,8 @@ namespace CustomerAppBackend.DataObject
             this.UpdatedAt = data["updated_at"] != null ? DateTime.Parse(data["updated_at"] as String) : (DateTime?)null;
             this.Receipt = new Receipt(data["receipt"] as IDictionary);
 
-            ShipmentStatus sstatus;
-            Enum<ShipmentStatus>.TryParse(data["status"] as String, out sstatus);
+            ShipmentStatusType sstatus;
+            Enum<ShipmentStatusType>.TryParse(data["status"] as String, out sstatus);
             this.Status = sstatus;
         }
 

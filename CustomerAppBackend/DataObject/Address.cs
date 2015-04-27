@@ -57,7 +57,7 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public string Zip
+        public string PostalCode
         {
             get;
             set;
@@ -118,7 +118,7 @@ namespace CustomerAppBackend.DataObject
                 address2 = this.Address2,
                 city = this.City,
                 province = this.State,
-                zip = this.Zip,
+                zip = this.PostalCode,
                 country = this.Country,
                 first_name = this.FirstName,
                 last_name = this.LastName,
@@ -140,7 +140,7 @@ namespace CustomerAppBackend.DataObject
             this.City = data["city"] as String;
             this.State = data["province"] as String;
             this.StateCode = data["province_code"] as String;
-            this.Zip = data["zip"] as String;
+            this.PostalCode = data["zip"] as String;
             this.Country = data["country"] as String;
             this.CountryCode = data["country_code"] as String;
             this.Phone = data["phone"] as String;

@@ -39,7 +39,7 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public CancelReason CancelReason
+        public CancelReasonType CancelReason
         {
             get;
             set;
@@ -93,7 +93,7 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public FinancialStatus FinancialStatus
+        public FinancialStatusType FinancialStatus
         {
             get;
             set;
@@ -105,7 +105,7 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public OrderStatus Status
+        public OrderStatusType Status
         {
             get;
             set;
@@ -255,7 +255,7 @@ namespace CustomerAppBackend.DataObject
             if (!String.IsNullOrWhiteSpace(this.Currency))
                 data.order.currency = this.Currency;
 
-            if (this.FinancialStatus != FinancialStatus.Unknown)
+            if (this.FinancialStatus != FinancialStatusType.Unknown)
                 data.order.financial_status = this.FinancialStatus.ToString().ToLower();
 
             if (this.Customer != null)
@@ -310,16 +310,16 @@ namespace CustomerAppBackend.DataObject
             else
                 this.ShippingAddress = this.BillingAddress;
 
-            SI.CancelReason reason;
-            Enum<SI.CancelReason>.TryParse(data["cancel_reason"] as String, out reason);
+            SI.CancelReasonType reason;
+            Enum<SI.CancelReasonType>.TryParse(data["cancel_reason"] as String, out reason);
             this.CancelReason = reason;
 
-            SI.FinancialStatus fstatus;
-            Enum<SI.FinancialStatus>.TryParse(data["financial_status"] as String, out fstatus);
+            SI.FinancialStatusType fstatus;
+            Enum<SI.FinancialStatusType>.TryParse(data["financial_status"] as String, out fstatus);
             this.FinancialStatus = fstatus;
 
-            SI.OrderStatus ostatus;
-            Enum<SI.OrderStatus>.TryParse(data["fulfillment_status"] as String, out ostatus);
+            SI.OrderStatusType ostatus;
+            Enum<SI.OrderStatusType>.TryParse(data["fulfillment_status"] as String, out ostatus);
             this.Status = ostatus;
 
             this.DiscountCodes = ShopInterfaceBase.Transform<DiscountCode>(data["discount_codes"]);
