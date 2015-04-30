@@ -114,6 +114,13 @@ namespace CustomerAppBackend.ShopInterface.Shopify
             return retval;
         }
 
+        public List<Product> GetProductsByCategoryId(string id)
+        {
+            var path = "/admin/products.json";
+            var retval = this.Get<Product>(path, String.Format("collection_id={0}", id));
+            return retval;
+        }
+
         public Product GetProduct(int id)
         {
             var path = String.Format("/admin/products/#{id}.json", id);
@@ -128,10 +135,10 @@ namespace CustomerAppBackend.ShopInterface.Shopify
             return retval;
         }
 
-        public List<Category> GetCategories()
+        public List<Category> GetCategories(string featuredCollectionName = "frontpage")
         {
             var path = "/admin/custom_collections.json";
-            var retval = this.Get<Category>(path);
+            var retval = this.Get<Category>(path).Where(x => x.Visible && x.Name != featuredCollectionName).ToList();
             return retval;
         }
             
@@ -139,14 +146,15 @@ namespace CustomerAppBackend.ShopInterface.Shopify
         {
             var retval = new List<Product>();
 
-            if (!String.IsNullOrWhiteSpace(featuredCollectionName))
+            if (String.IsNullOrWhiteSpace(featuredCollectionName))
                 featuredCollectionName = "frontpage";
 
-            var featuredCategory = this.GetCategories().FirstOrDefault(x => x.Name == featuredCollectionName);
+            var path = "/admin/custom_collections.json";
+            var featuredCategory = this.Get<Category>(path).FirstOrDefault(x => x.Visible && x.Name == featuredCollectionName);
                 
             if (featuredCategory != null)
             {
-                var path = "/admin/products.json";
+                path = "/admin/products.json";
                 retval = this.Get<Product>(path, String.Format("collection_id={0}", featuredCategory.Id));
             }
             else

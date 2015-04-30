@@ -29,13 +29,13 @@ namespace CustomerAppBackend.Controllers
             var retval = new DataWrapper<bool>()
                 {
                     Error = String.Empty,
-                    Data = false
+                    Data = true
                 };
                       
-            string error;
-            var db = new DataAccess();
-            retval.Data = db.CanAccess(Request["accessKey"], out error);
-            retval.Error = error;
+//            string error;
+//            var db = new DataAccess();
+//            retval.Data = db.CanAccess(Request["accessKey"], out error);
+//            retval.Error = error;
 
             return Json(retval, JsonRequestBehavior.AllowGet);
         }
@@ -414,6 +414,33 @@ namespace CustomerAppBackend.Controllers
                     var api = new Shopify();
                     retval.Data = api.GetProduct(productId);
                 }
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
+        public JsonResult GetProductsByCategoryId()
+        {
+            var retval = new DataWrapper<List<Product>>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            if (Request["categoryId"] == null)
+            {
+                retval.Error = "Category Id is missing or invalid.";
+                return Json(retval, _requestBehavior);
+            }
+
+            try
+            {
+                var api = new Shopify();
+                retval.Data = api.GetProductsByCategoryId(Request["categoryId"]);
             }
             catch(Exception ex)
             {

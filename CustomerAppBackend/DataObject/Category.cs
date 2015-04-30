@@ -56,6 +56,12 @@ namespace CustomerAppBackend
             set;
         }
 
+        public bool Visible
+        {
+            get;
+            set;
+        }
+
         #region IShopify implementation
 
         public string ToShopifyJson()
@@ -70,6 +76,7 @@ namespace CustomerAppBackend
             this.Name = data["handle"] as String ?? String.Empty;
             this.SortOrder = data["sort_order"] as String ?? String.Empty;
             this.Title = data["title"] as String ?? String.Empty;
+            this.Visible = (bool)(data["published"] ?? true);
 
             if (data["image"] != null)
                 this.ImageUrl = (data["image"] as IDictionary)["src"] as String ?? String.Empty;
