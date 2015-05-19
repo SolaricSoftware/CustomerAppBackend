@@ -24,7 +24,7 @@ namespace CustomerAppBackend.Controllers
             return View ();
         }
 
-        public JsonResult CanAccess()
+        public JsonResult CanAccess(string accessKey)
         {
             var retval = new DataWrapper<bool>()
                 {
@@ -34,8 +34,46 @@ namespace CustomerAppBackend.Controllers
                       
 //            string error;
 //            var db = new DataAccess();
-//            retval.Data = db.CanAccess(Request["accessKey"], out error);
+//            retval.Data = db.CanAccess(accessKey, out error);
 //            retval.Error = error;
+
+            return Json(retval, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult Login(string accessKey, string username, string password) 
+        {
+            var retval = new DataWrapper<Customer>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            try
+            {
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(accessKey, out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var api = new Shopify();
+                    var customer = api.GetCustomer(username);
+
+                    if (customer != null)
+                    {
+                        retval.Data = customer;
+                    }
+                    else
+                    {
+                        retval.Error = "Invalid username or password.";
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
 
             return Json(retval, JsonRequestBehavior.AllowGet);
         }
@@ -200,7 +238,7 @@ namespace CustomerAppBackend.Controllers
             return Json(retval, _requestBehavior);
         }
 
-        public JsonResult GetCustomer()
+        public JsonResult GetCustomer(string email)
         {
             var retval = new DataWrapper<Customer>()
                 {
@@ -208,21 +246,27 @@ namespace CustomerAppBackend.Controllers
                     Data = null
                 };
 
-            try
+            if (Request["email"] == null)
             {
-                var email = Request["email"];
-                var api = new Shopify();
-                retval.Data = api.GetCustomer(email);
+                retval.Error = "Email is required to retrieve a customer.";
             }
-            catch(Exception ex)
+            else
             {
-                retval.Error = ex.Message;
+                try
+                {
+                    var api = new Shopify();
+                    retval.Data = api.GetCustomer(email);
+                }
+                catch (Exception ex)
+                {
+                    retval.Error = ex.Message;
+                }
             }
 
             return Json(retval, _requestBehavior);
         }
 
-        public JsonResult GetOrders()
+        public JsonResult GetOrders(int customerId)
         {
             var retval = new DataWrapper<List<Order>>()
                 {
@@ -232,7 +276,6 @@ namespace CustomerAppBackend.Controllers
 
             try
             {
-                var customerId = Int32.Parse(Request["customerId"]);
                 var api = new Shopify();
                 retval.Data = api.GetOrders(customerId);
             }
@@ -244,7 +287,7 @@ namespace CustomerAppBackend.Controllers
             return Json(retval, _requestBehavior);
         }
 
-        public JsonResult GetOrder()
+        public JsonResult GetOrder(int orderId)
         {
             var retval = new DataWrapper<Order>()
                 {
@@ -254,7 +297,6 @@ namespace CustomerAppBackend.Controllers
 
             try
             {
-                var orderId = Int32.Parse(Request["orderId"]);
                 var api = new Shopify();
                 retval.Data = api.GetOrder(orderId);
             }
@@ -273,6 +315,45 @@ namespace CustomerAppBackend.Controllers
             var wrapper = new DataWrapper<Order>();
 
             return Json(wrapper);
+        }
+
+        [HttpPost]
+        public JsonResult CalculateCart()
+        {
+            var retval = new DataWrapper<Order>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            if (String.IsNullOrWhiteSpace(Request["order"]))
+            {
+                retval.Error = "Order object is required.";
+                return Json(retval, _requestBehavior);
+            }
+
+            try
+            {
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(Request["accessKey"], out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var order = (new JavaScriptSerializer()).Deserialize<Order>(Request["order"]);
+                    var api = new Shopify();
+                    retval.Data = retval.Data = api.CreateOrder(order);
+
+                    api.DeleteOrder(retval.Data.Id);
+                }
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
         }
 
         public JsonResult GetPolicy()
@@ -317,7 +398,7 @@ namespace CustomerAppBackend.Controllers
             return Json(retval, _requestBehavior);
         }
 
-        public JsonResult GetLocation()
+        public JsonResult GetLocation(string accessKey, int locationId)
         {
             var retval = new DataWrapper<Location>()
                 {
@@ -329,12 +410,11 @@ namespace CustomerAppBackend.Controllers
             {
                 string error = String.Empty;
                 var db = new DataAccess();
-                var canAccess = db.CanAccess(Request["accessKey"], out error);
+                var canAccess = db.CanAccess(accessKey, out error);
                 retval.Error = error;
 
                 if(canAccess)
                 {
-                    var locationId = Int32.Parse(Request["locationId"]);
                     var api = new Shopify();
                     retval.Data = api.GetLocation(locationId);
                 }
@@ -464,6 +544,58 @@ namespace CustomerAppBackend.Controllers
 
                 var api = new Shopify();
                 retval.Data = api.GetFeaturedProducts();
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
+        public JsonResult CalculateTaxes() 
+        {
+            var retval = new DataWrapper<List<TaxInfo>>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+
+            if (Request["countryCode"] == null)
+            {
+                retval.Error = "A country code is required to calculate taxes.";
+                return Json(retval, _requestBehavior);
+            }
+
+            if (Request["provinceCode"] == null)
+            {
+                retval.Error = "A province code is required to calculate taxes.";
+                return Json(retval, _requestBehavior);
+            }
+
+            if (Request["subtotal"] == null)
+            {
+                retval.Error = "A subtotal is required to calculate taxes.";
+                return Json(retval, _requestBehavior);
+            }
+
+            try
+            {
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(Request["accessKey"], out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var countryCode = Request["countryCode"];
+                    var provinceCode = Request["provinceCode"];
+                    var subtotal = Decimal.Parse(Request["subtotal"]);
+
+                    var api = new Shopify();
+                    retval.Data = api.CalculateTaxes(countryCode, provinceCode, subtotal);
+                }
             }
             catch(Exception ex)
             {

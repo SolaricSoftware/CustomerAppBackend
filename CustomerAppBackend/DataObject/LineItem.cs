@@ -149,18 +149,18 @@ namespace CustomerAppBackend.DataObject
 
             this.Id = (int)data["id"];
             this.FulfillableQuantity = (int)data["fulfillable_quantity"];
-            this.FulfillmentService = data["fulfillment_service"] as String;
+            this.FulfillmentService = data["fulfillment_service"] as String ?? "";
             this.Grams = (int)data["grams"];
             this.Price = Decimal.Parse(data["price"] as String);
-            this.ProductId = (int)data["product_id"];
-            this.Quantity = (int)data["quantity"];
+            this.ProductId = data["product_id"] != null ? (int)data["product_id"] : 0;
+            this.Quantity = data["quantity"] != null ? (int)data["quantity"] : 0;
             this.RequiresShipping = (bool)data["requires_shipping"];
-            this.Sku = data["sku"] as String;
-            this.Title = data["title"] as String;
-            this.VariantId = (int)data["variant_id"];
-            this.VariantTitle = data["variant_title"] as String;
-            this.Vendor = data["vendor"] as String;
-            this.Name = data["name"] as String;
+            this.Sku = data["sku"] as String ?? "";
+            this.Title = data["title"] as String ?? "";
+            this.VariantId = data["variant_id"] != null ? (int)data["variant_id"] : 0;
+            this.VariantTitle = data["variant_title"] as String ?? "";
+            this.Vendor = data["vendor"] as String ?? "";
+            this.Name = data["name"] as String ?? "";
             this.ProductExists = (bool)data["product_exists"];
             this.Properites = data["properties"] as List<String>;
 

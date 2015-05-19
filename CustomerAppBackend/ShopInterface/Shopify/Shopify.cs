@@ -30,11 +30,11 @@ namespace CustomerAppBackend.ShopInterface.Shopify
             return retval;
         }
 
-        public List<TaxInfo> CalculateTaxes(string countryCode, string proviceCode, decimal totalPrice)
+        public List<TaxInfo> CalculateTaxes(string countryCode, string provinceCode, decimal subtotal)
         {
             var path = "/admin/countries.json";
             var country = this.Get<CountryInfo>(path).FirstOrDefault(x => x.Code == countryCode);
-            var provice = country.Provinces.FirstOrDefault(x => x.Code == proviceCode);
+            var provice = country.Provinces.FirstOrDefault(x => x.Code == provinceCode);
 
             var retval = new List<TaxInfo>();
             if (country.Tax > 0)
@@ -43,7 +43,7 @@ namespace CustomerAppBackend.ShopInterface.Shopify
                     {
                         Rate = country.Tax,
                         Title = country.TaxName,
-                        Price = Math.Round(totalPrice * country.Tax, 2)
+                        Amount = Math.Round(subtotal * country.Tax, 2)
                     });
             }
 
@@ -51,7 +51,7 @@ namespace CustomerAppBackend.ShopInterface.Shopify
                 {
                     Rate = provice.Tax,
                     Title = provice.TaxName,
-                    Price = Math.Round(totalPrice * provice.Tax, 2)
+                    Amount = Math.Round(subtotal * provice.Tax, 2)
                 });
 
             return retval;
@@ -98,6 +98,12 @@ namespace CustomerAppBackend.ShopInterface.Shopify
             var path = "/admin/orders.json";
             var retval = this.Post<Order>(path, order);
             return retval.FirstOrDefault();
+        }
+
+        public void DeleteOrder(int id)
+        {
+            var path = String.Format("/admin/orders/#{0}.json", id);
+            this.Delete(path);
         }
 
         public List<Product> GetProducts()
@@ -255,6 +261,25 @@ namespace CustomerAppBackend.ShopInterface.Shopify
             
             var obj = (new JavaScriptSerializer()).DeserializeObject(result);
             return obj;
+        }
+
+        public void Delete(string path)
+        {
+            var url = String.Format("https://{0}.myshopify.com/{1}", this._shopName, path);
+            var request = WebRequest.Create(url) as HttpWebRequest;
+            request.ContentType = "application/json";
+            request.Method = "DELETE";
+            request.Credentials = new NetworkCredential(this._apiKey, this._password);
+
+            var response = (HttpWebResponse)request.GetResponse();
+            string result = null;
+
+            using (Stream stream = response.GetResponseStream())
+            {
+                StreamReader sr = new StreamReader(stream);
+                result = sr.ReadToEnd();
+                sr.Close();
+            }
         }
     }
 }

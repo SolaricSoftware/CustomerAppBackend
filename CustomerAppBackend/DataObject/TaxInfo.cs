@@ -19,7 +19,7 @@ namespace CustomerAppBackend.DataObject
             this.LoadFromShopifyObject(data);
         }
 
-        public decimal Price
+        public decimal Amount
         {
             get;
             set;
@@ -42,7 +42,7 @@ namespace CustomerAppBackend.DataObject
         public string ToShopifyJson()
         {
             var data = new {
-                price = this.Price,
+                price = this.Amount,
                 rate = this.Rate,
                 title = this.Title
             };
@@ -53,7 +53,7 @@ namespace CustomerAppBackend.DataObject
 
         public void LoadFromShopifyObject(IDictionary data)
         {
-            this.Price = Decimal.Parse(data["price"] as String);
+            this.Amount = Decimal.Parse(data["price"] as String);
             this.Rate = (decimal)data["rate"];
             this.Title = data["title"] as String;
         }
