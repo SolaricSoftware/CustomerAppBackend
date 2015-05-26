@@ -15,17 +15,19 @@ namespace CustomerAppBackend.Data
 
         public bool CanAccess(string accessKey, out string error)
         {
-            Guid ak;
-            if (Guid.TryParse(accessKey, out ak))
-            {
-                error = String.Empty;
-                return this.CanAccess(ak);
-            }
-            else
-            {
-                error = "Access Key is missing or invalid.";
-                return false;
-            }
+//            Guid ak;
+//            if (Guid.TryParse(accessKey, out ak))
+//            {
+//                error = String.Empty;
+//                return this.CanAccess(ak);
+//            }
+//            else
+//            {
+//                error = "Access Key is missing or invalid.";
+//                return false;
+//            }
+            error = String.Empty;
+            return true;
         }
             
         public bool CanAccess(Guid accessKey)

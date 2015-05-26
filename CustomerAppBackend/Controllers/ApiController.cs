@@ -32,10 +32,10 @@ namespace CustomerAppBackend.Controllers
                     Data = true
                 };
                       
-//            string error;
-//            var db = new DataAccess();
-//            retval.Data = db.CanAccess(accessKey, out error);
-//            retval.Error = error;
+            string error;
+            var db = new DataAccess();
+            retval.Data = db.CanAccess(accessKey, out error);
+            retval.Error = error;
 
             return Json(retval, JsonRequestBehavior.AllowGet);
         }
@@ -318,7 +318,7 @@ namespace CustomerAppBackend.Controllers
         }
 
         [HttpPost]
-        public JsonResult CalculateCart()
+        public JsonResult CalculateCart(string accessKey, string order)
         {
             var retval = new DataWrapper<Order>()
                 {
@@ -326,7 +326,7 @@ namespace CustomerAppBackend.Controllers
                     Data = null
                 };
 
-            if (String.IsNullOrWhiteSpace(Request["order"]))
+            if (String.IsNullOrWhiteSpace(order))
             {
                 retval.Error = "Order object is required.";
                 return Json(retval, _requestBehavior);
@@ -336,14 +336,14 @@ namespace CustomerAppBackend.Controllers
             {
                 string error = String.Empty;
                 var db = new DataAccess();
-                var canAccess = db.CanAccess(Request["accessKey"], out error);
+                var canAccess = db.CanAccess(accessKey, out error);
                 retval.Error = error;
 
                 if(canAccess)
                 {
-                    var order = (new JavaScriptSerializer()).Deserialize<Order>(Request["order"]);
+                    var orderObj = (new JavaScriptSerializer()).Deserialize<Order>(order);
                     var api = new Shopify();
-                    retval.Data = retval.Data = api.CreateOrder(order);
+                    retval.Data = retval.Data = api.CreateOrder(orderObj);
 
                     api.DeleteOrder(retval.Data.Id);
                 }
