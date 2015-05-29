@@ -266,6 +266,251 @@ namespace CustomerAppBackend.Controllers
             return Json(retval, _requestBehavior);
         }
 
+        public JsonResult GetAddresses(string accessKey, int customerId)
+        {
+            var retval = new DataWrapper<List<Address>>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            if (customerId <= 0)
+            {
+                retval.Error = "Invalid Customer Id";
+                return Json(retval, _requestBehavior);
+            }
+
+            try
+            {
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(accessKey, out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var api = new Shopify();
+                    retval.Data = api.GetAddresses(customerId);
+                }
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
+        public JsonResult GetAddress(string accessKey, int customerId, int addressId)
+        {
+            var retval = new DataWrapper<Address>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            if (customerId <= 0)
+            {
+                retval.Error = "Invalid Customer Id";
+                return Json(retval, _requestBehavior);
+            }
+
+            if (addressId <= 0)
+            {
+                retval.Error = "Invalid Address Id";
+                return Json(retval, _requestBehavior);
+            }
+
+            try
+            {
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(accessKey, out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var api = new Shopify();
+                    retval.Data = api.GetAddress(customerId, addressId);
+                }
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
+        [HttpPost]
+        public JsonResult AddAddress(string accessKey, int customerId, string address)
+        {
+            var retval = new DataWrapper<Address>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            if (customerId <= 0)
+            {
+                retval.Error = "Invalid Customer Id";
+                return Json(retval, _requestBehavior);
+            }
+
+            if (String.IsNullOrWhiteSpace(address))
+            {
+                retval.Error = "Address object is required.";
+                return Json(retval, _requestBehavior);
+            }
+
+            try
+            {
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(accessKey, out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var obj = (new JavaScriptSerializer()).Deserialize<Address>(address);
+                    var api = new Shopify();
+                    retval.Data = api.AddAddress(customerId, obj);
+                }
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
+        [HttpPost]
+        public JsonResult UpdateAddress(string accessKey, int customerId, string address)
+        {
+            var retval = new DataWrapper<Address>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            if (customerId <= 0)
+            {
+                retval.Error = "Invalid Customer Id";
+                return Json(retval, _requestBehavior);
+            }
+
+            if (String.IsNullOrWhiteSpace(address))
+            {
+                retval.Error = "Address object is required.";
+                return Json(retval, _requestBehavior);
+            }
+
+            try
+            {
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(accessKey, out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var obj = (new JavaScriptSerializer()).Deserialize<Address>(address);
+                    var api = new Shopify();
+                    retval.Data = api.UpdateAddress(customerId, obj);
+                }
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+            
+        public JsonResult DeleteAddress(string accessKey, int customerId, int addressId)
+        {
+            var retval = new DataWrapper<bool>()
+                {
+                    Error = String.Empty,
+                    Data = false
+                };
+
+            if (customerId <= 0)
+            {
+                retval.Error = "Invalid Customer Id";
+                return Json(retval, _requestBehavior);
+            }
+
+            if (addressId <= 0)
+            {
+                retval.Error = "Invalid Address Id";
+                return Json(retval, _requestBehavior);
+            }
+
+            try
+            {
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(accessKey, out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var api = new Shopify();
+                    api.DeleteAddress(customerId, addressId);
+                    retval.Data = true;
+                }
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
+        public JsonResult SetDefaultAddress(string accessKey, int customerId, int addressId)
+        {
+            var retval = new DataWrapper<Address>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            if (customerId <= 0)
+            {
+                retval.Error = "Invalid Customer Id";
+                return Json(retval, _requestBehavior);
+            }
+
+            if (addressId <= 0)
+            {
+                retval.Error = "Invalid Address Id";
+                return Json(retval, _requestBehavior);
+            }
+
+            try
+            {
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(accessKey, out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var api = new Shopify();
+                    retval.Data = api.SetDefaultAddress(customerId, addressId);
+                }
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
         public JsonResult GetOrders(int customerId)
         {
             var retval = new DataWrapper<List<Order>>()
@@ -343,7 +588,7 @@ namespace CustomerAppBackend.Controllers
                 {
                     var orderObj = (new JavaScriptSerializer()).Deserialize<Order>(order);
                     var api = new Shopify();
-                    retval.Data = retval.Data = api.CreateOrder(orderObj);
+                    retval.Data = api.CreateOrder(orderObj);
 
                     api.DeleteOrder(retval.Data.Id);
                 }
@@ -603,35 +848,6 @@ namespace CustomerAppBackend.Controllers
             }
 
             return Json(retval, _requestBehavior);
-        }
-            
-        public void StoreTest() {
-//            var customer = new Customer
-//            {
-//                    FirstName = "Jane",
-//                    LastName = "Doe15",
-//                    Email = "jane.doe15@testemail.com",
-//                    Addressess = new List<Address> {
-//                        new Address {
-//                            Address1 = "123 E Spring St",
-//                            Address2 = "Apt 12",
-//                            City = "New Albany",
-//                            State = "IN",
-//                            Zip = "47150",
-//                            Country = "US",
-//                            FirstName = "Jane",
-//                            LastName = "Doe",
-//                            Phone = "8125551212"
-//                        }
-//                    },
-//                    Password = "password1"
-//            };
-
-            var api = new Shopify();
-
-            var products = api.GetFeaturedProducts();
-
-            var a = 1 + 1;
         }
     }
 }

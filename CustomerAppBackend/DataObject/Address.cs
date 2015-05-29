@@ -19,13 +19,12 @@ namespace CustomerAppBackend.DataObject
         {
             this.LoadFromShopifyObject(data);
         }
-
-        //Id is sometimes present, sometimes not. Do we really need to know it?
-//        public int Id
-//        {
-//            get;
-//            set;
-//        }
+            
+        public int Id
+        {
+            get;
+            set;
+        }
 
         public string Address1
         {
@@ -114,6 +113,7 @@ namespace CustomerAppBackend.DataObject
         public string ToShopifyJson()
         {
             var data = new {
+                id = this.Id,
                 address1 = this.Address1,
                 address2 = this.Address2,
                 city = this.City,
@@ -122,7 +122,8 @@ namespace CustomerAppBackend.DataObject
                 country = this.Country,
                 first_name = this.FirstName,
                 last_name = this.LastName,
-                phone = this.Phone
+                phone = this.Phone,
+                company = this.Company
             };
 
             var retval = Helper.Serialize(data);
@@ -134,7 +135,7 @@ namespace CustomerAppBackend.DataObject
             if (data == null || data.Keys.Count == 0)
                 return;
 
-            //this.Id = (int)data["id"];
+            this.Id = (int)data["id"];
             this.Address1 = data["address1"] as String;
             this.Address2 = data["address2"] as String;
             this.City = data["city"] as String;
@@ -148,7 +149,7 @@ namespace CustomerAppBackend.DataObject
             this.LastName = data["last_name"] as String;
             this.Company = data["company"] as String;
             this.Name = data["name"] as String;
-            this.Default = (data["default"] as String ?? String.Empty) == "True";
+            this.Default = (bool)data["default"];
         }
     }
 }

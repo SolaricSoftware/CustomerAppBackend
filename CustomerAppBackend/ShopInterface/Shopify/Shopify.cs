@@ -79,6 +79,47 @@ namespace CustomerAppBackend.ShopInterface.Shopify
             return retval;
         }
 
+        public List<Address> GetAddresses(int customerId)
+        {
+            var path = String.Format("/admin/customers/{0}/addresses.json", customerId);
+            var retval = this.Get<Address>(path);
+            return retval;
+        }
+
+        public Address GetAddress(int customerId, int addressId)
+        {
+            var path = String.Format("/admin/customers/{0}/addresses/{1}.json", customerId, addressId);
+            var retval = this.Get<Address>(path).FirstOrDefault();
+            return retval;
+        }
+
+        public Address AddAddress(int customerId, Address address)
+        {
+            var path = String.Format("/admin/customers/{0}/addresses.json", customerId);
+            var retval = this.Post<Address>(path, address).FirstOrDefault();
+            return retval;
+        }
+
+        public Address UpdateAddress(int customerId, Address address)
+        {
+            var path = String.Format("/admin/customers/{0}/addresses/{1}.json", customerId, address.Id);
+            var retval = this.Put<Address>(path, address).FirstOrDefault();
+            return retval;
+        }
+
+        public void DeleteAddress(int customerId, int addressId)
+        {
+            var path = String.Format("/admin/customers/{0}/addresses/{1}.json", customerId, addressId);
+            this.Delete(path);
+        }
+
+        public Address SetDefaultAddress(int customerId, int addressId)
+        {
+            var path = String.Format("/admin/customers/{0}/addresses/{1}/default.json", customerId, addressId);
+            var retval = this.Put<Address>(path).FirstOrDefault();
+            return retval;
+        }
+
         public List<Order> GetOrders(int customerId, string status = "any")
         {
             var path = String.Format("/admin/orders.json");
@@ -231,36 +272,26 @@ namespace CustomerAppBackend.ShopInterface.Shopify
 
         public object Post(string path, IShopify data) 
         {
-            string result = null;
+            return this.ExecuteInstruction("POST", path, data);
+        }
 
-            var url = String.Format("https://{0}.myshopify.com/{1}", this._shopName, path);
-            var request = WebRequest.Create(url) as HttpWebRequest;
-            request.ContentType = "application/json";
-            request.Accept = "application/json";
-            request.Method = "POST";
-            request.Credentials = new NetworkCredential(this._apiKey, this._password);
+        public List<T> Put<T>(string path) where T: IShopify, new()
+        {
+            var obj = this.Put(path, null);
+            var retval = Transform<T>(obj);
+            return retval;
+        }
 
-            var postData = data.ToShopifyJson();
-            using (var writer = new StreamWriter(request.GetRequestStream()))
-            {
-                writer.Write(postData);
-                writer.Close();
-            }
-                
-            var response = request.GetResponse() as HttpWebResponse;
+        public List<T> Put<T>(string path, IShopify data) where T: IShopify, new()
+        {
+            var obj = this.Put(path, data);
+            var retval = Transform<T>(obj);
+            return retval;
+        }
 
-            using (Stream stream = response.GetResponseStream())
-            {
-                StreamReader sr = new StreamReader(stream);
-                result = sr.ReadToEnd();
-                sr.Close();
-            }
-
-            if (String.IsNullOrWhiteSpace(result))
-                    return null;
-            
-            var obj = (new JavaScriptSerializer()).DeserializeObject(result);
-            return obj;
+        public object Put(string path, IShopify data) 
+        {
+            return this.ExecuteInstruction("PUT", path, data);
         }
 
         public void Delete(string path)
@@ -272,7 +303,41 @@ namespace CustomerAppBackend.ShopInterface.Shopify
             request.Credentials = new NetworkCredential(this._apiKey, this._password);
 
             var response = (HttpWebResponse)request.GetResponse();
+        }
+
+        private object ExecuteInstruction(string method, string path, IShopify data)
+        {
             string result = null;
+
+            var url = String.Format("https://{0}.myshopify.com/{1}", this._shopName, path);
+            var request = WebRequest.Create(url) as HttpWebRequest;
+            request.ContentType = "application/json";
+            request.Accept = "application/json";
+            request.Method = method;
+            request.Credentials = new NetworkCredential(this._apiKey, this._password);
+
+            if (data != null)
+            {
+                string json;
+
+                if (data.GetType() != typeof(Address))
+                {
+                    json = data.ToShopifyJson();
+                }
+                else
+                {
+                    json ="{\"address\": " +  data.ToShopifyJson() + "}";
+                }
+
+                var postData = json;
+                using (var writer = new StreamWriter(request.GetRequestStream()))
+                {
+                    writer.Write(postData);
+                    writer.Close();
+                }
+            }
+
+            var response = request.GetResponse() as HttpWebResponse;
 
             using (Stream stream = response.GetResponseStream())
             {
@@ -280,6 +345,12 @@ namespace CustomerAppBackend.ShopInterface.Shopify
                 result = sr.ReadToEnd();
                 sr.Close();
             }
+
+            if (String.IsNullOrWhiteSpace(result))
+                return null;
+
+            var obj = (new JavaScriptSerializer()).DeserializeObject(result);
+            return obj;
         }
     }
 }

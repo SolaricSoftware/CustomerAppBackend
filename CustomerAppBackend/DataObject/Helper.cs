@@ -7,7 +7,8 @@ namespace CustomerAppBackend.DataObject
     {
         public static string Serialize(object data)
         {
-            return (new JavaScriptSerializer()).Serialize(data).Replace("\"[", "[").Replace("\\\"", "\"").Replace("]\"", "]").Replace("\"{", "{").Replace("}\"", "}");
+            var retval = (new JavaScriptSerializer()).Serialize(data).Replace("\"[", "[").Replace("\\\"", "\"").Replace("]\"", "]").Replace("\"{", "{").Replace("}\"", "}");
+            return retval;
         }
     }
 }
