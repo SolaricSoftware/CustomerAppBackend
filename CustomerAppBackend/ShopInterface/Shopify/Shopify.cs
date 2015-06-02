@@ -120,6 +120,13 @@ namespace CustomerAppBackend.ShopInterface.Shopify
             return retval;
         }
 
+        public List<FulfillmentService> GetFulfillmentServices() 
+        {
+            var path = String.Format("/admin/fulfillment_services.json");
+            var retval = this.Get<FulfillmentService>(path, "scope=all");
+            return retval;
+        }
+
         public List<Order> GetOrders(int customerId, string status = "any")
         {
             var path = String.Format("/admin/orders.json");
@@ -302,7 +309,7 @@ namespace CustomerAppBackend.ShopInterface.Shopify
             request.Method = "DELETE";
             request.Credentials = new NetworkCredential(this._apiKey, this._password);
 
-            var response = (HttpWebResponse)request.GetResponse();
+            request.GetResponse();
         }
 
         private object ExecuteInstruction(string method, string path, IShopify data)

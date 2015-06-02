@@ -511,6 +511,35 @@ namespace CustomerAppBackend.Controllers
             return Json(retval, _requestBehavior);
         }
 
+        public JsonResult GetFulfillmentServices(string accessKey)
+        {
+            var retval = new DataWrapper<List<FulfillmentService>>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            try
+            {
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(accessKey, out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var api = new Shopify();
+                    retval.Data = api.GetFulfillmentServices();
+                }
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
         public JsonResult GetOrders(int customerId)
         {
             var retval = new DataWrapper<List<Order>>()
