@@ -96,7 +96,7 @@ namespace CustomerAppBackend.DataObject
             this.OrderId = (int)data["order_id"];
             this.TrackingCompany = data["tracking_company"] as String;
             this.TrackingNumber = data["tracking_number"] as String;
-            this.TrackingUrls = data["tracking_urls"] as List<String>;
+            this.TrackingUrls = data["tracking_urls"] as List<String> ?? new List<string>();
             this.UpdatedAt = data["updated_at"] != null ? DateTime.Parse(data["updated_at"] as String) : (DateTime?)null;
             this.Receipt = new Receipt(data["receipt"] as IDictionary);
 

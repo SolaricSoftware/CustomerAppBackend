@@ -19,13 +19,19 @@ namespace CustomerAppBackend.Data
 //            if (Guid.TryParse(accessKey, out ak))
 //            {
 //                error = String.Empty;
-//                return this.CanAccess(ak);
+//                var val = this.CanAccess(ak);
+//
+//                if (!val)
+//                    error = "Access Denined.";
+//
+//                return val;
 //            }
 //            else
 //            {
 //                error = "Access Key is missing or invalid.";
 //                return false;
 //            }
+
             error = String.Empty;
             return true;
         }

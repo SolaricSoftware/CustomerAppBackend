@@ -135,7 +135,9 @@ namespace CustomerAppBackend.DataObject
             if (data == null || data.Keys.Count == 0)
                 return;
 
-            this.Id = (int)data["id"];
+            if (data["id"] != null)
+                this.Id = (int)data["id"];
+
             this.Address1 = data["address1"] as String;
             this.Address2 = data["address2"] as String;
             this.City = data["city"] as String;
@@ -149,7 +151,9 @@ namespace CustomerAppBackend.DataObject
             this.LastName = data["last_name"] as String;
             this.Company = data["company"] as String;
             this.Name = data["name"] as String;
-            this.Default = (bool)data["default"];
+
+            if (data["default"] != null)
+                this.Default = (bool)data["default"];
         }
     }
 }

@@ -540,7 +540,7 @@ namespace CustomerAppBackend.Controllers
             return Json(retval, _requestBehavior);
         }
 
-        public JsonResult GetOrders(int customerId)
+        public JsonResult GetOrders(string accessKey, int customerId)
         {
             var retval = new DataWrapper<List<Order>>()
                 {
@@ -548,10 +548,24 @@ namespace CustomerAppBackend.Controllers
                     Data = null
                 };
 
+            if (customerId <= 0)
+            {
+                retval.Error = "Invalid Customer Id";
+                return Json(retval, _requestBehavior);
+            }
+
             try
             {
-                var api = new Shopify();
-                retval.Data = api.GetOrders(customerId);
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(accessKey, out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var api = new Shopify();
+                    retval.Data = api.GetOrders(customerId);
+                }
             }
             catch(Exception ex)
             {
@@ -561,7 +575,7 @@ namespace CustomerAppBackend.Controllers
             return Json(retval, _requestBehavior);
         }
 
-        public JsonResult GetOrder(int orderId)
+        public JsonResult GetOrder(string accessKey, int orderId)
         {
             var retval = new DataWrapper<Order>()
                 {
@@ -569,16 +583,30 @@ namespace CustomerAppBackend.Controllers
                     Data = null
                 };
 
+            if (orderId <= 0)
+            {
+                retval.Error = "Invalid Order Id";
+                return Json(retval, _requestBehavior);
+            }
+
             try
             {
-                var api = new Shopify();
-                retval.Data = api.GetOrder(orderId);
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(accessKey, out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var api = new Shopify();
+                    retval.Data = api.GetOrder(orderId);
+                }
             }
             catch(Exception ex)
             {
                 retval.Error = ex.Message;
             }
-
+                
             return Json(retval, _requestBehavior);
         }
 
