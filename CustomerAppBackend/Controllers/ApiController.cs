@@ -805,7 +805,7 @@ namespace CustomerAppBackend.Controllers
             return Json(retval, _requestBehavior);
         }
 
-        public JsonResult GetProductsByCategoryId()
+        public JsonResult GetProductsByCategoryId(int categoryId)
         {
             var retval = new DataWrapper<List<Product>>()
                 {
@@ -813,7 +813,7 @@ namespace CustomerAppBackend.Controllers
                     Data = null
                 };
 
-            if (Request["categoryId"] == null)
+            if (categoryId == 0)
             {
                 retval.Error = "Category Id is missing or invalid.";
                 return Json(retval, _requestBehavior);
@@ -823,6 +823,41 @@ namespace CustomerAppBackend.Controllers
             {
                 var api = new Shopify();
                 retval.Data = api.GetProductsByCategoryId(Request["categoryId"]);
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
+        public JsonResult GetProductImages(string accessKey, int productId)
+        {
+            var retval = new DataWrapper<List<ProductImage>>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            if (productId <= 0)
+            {
+                retval.Error = "Invalid Product Id";
+                return Json(retval, _requestBehavior);
+            }
+
+            try
+            {
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(accessKey, out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var api = new Shopify();
+                    retval.Data = api.GetProductImages(productId);
+                }
             }
             catch(Exception ex)
             {

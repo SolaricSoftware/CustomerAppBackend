@@ -177,8 +177,15 @@ namespace CustomerAppBackend.ShopInterface.Shopify
 
         public Product GetProduct(int id)
         {
-            var path = String.Format("/admin/products/#{id}.json", id);
+            var path = String.Format("/admin/products/{0}.json", id);
             var retval = this.Get<Product>(path).FirstOrDefault();
+            return retval;
+        }
+
+        public List<ProductImage> GetProductImages(int productId)
+        {
+            var path = String.Format("/admin/products/{0}/images.json", productId);
+            var retval = this.Get<ProductImage>(path).OrderBy(x => x.Source).ToList();
             return retval;
         }
 
