@@ -867,6 +867,41 @@ namespace CustomerAppBackend.Controllers
             return Json(retval, _requestBehavior);
         }
 
+        public JsonResult GetFirstProductImage(string accessKey, int productId)
+        {
+            var retval = new DataWrapper<ProductImage>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            if (productId <= 0)
+            {
+                retval.Error = "Invalid Product Id";
+                return Json(retval, _requestBehavior);
+            }
+
+            try
+            {
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(accessKey, out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var api = new Shopify();
+                    retval.Data = api.GetProductImages(productId).OrderBy(x => x.Position).FirstOrDefault();
+                }
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
         public JsonResult GetFeaturedProducts()
         {
             var retval = new DataWrapper<List<Product>>()
