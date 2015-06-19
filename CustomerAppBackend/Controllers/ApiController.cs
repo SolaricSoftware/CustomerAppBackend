@@ -611,16 +611,7 @@ namespace CustomerAppBackend.Controllers
         }
 
         [HttpPost]
-        public JsonResult CreateOrder()
-        {
-            var data = Request["order"]; 
-            var wrapper = new DataWrapper<Order>();
-
-            return Json(wrapper);
-        }
-
-        [HttpPost]
-        public JsonResult CalculateCart(string accessKey, string order)
+        public JsonResult CreateOrder(string accessKey, string order)
         {
             var retval = new DataWrapper<Order>()
                 {
@@ -646,8 +637,6 @@ namespace CustomerAppBackend.Controllers
                     var orderObj = (new JavaScriptSerializer()).Deserialize<Order>(order);
                     var api = new Shopify();
                     retval.Data = api.CreateOrder(orderObj);
-
-                    api.DeleteOrder(retval.Data.Id);
                 }
             }
             catch(Exception ex)
@@ -657,6 +646,45 @@ namespace CustomerAppBackend.Controllers
 
             return Json(retval, _requestBehavior);
         }
+
+//        [HttpPost]
+//        public JsonResult CalculateCart(string accessKey, string order)
+//        {
+//            var retval = new DataWrapper<Order>()
+//                {
+//                    Error = String.Empty,
+//                    Data = null
+//                };
+//
+//            if (String.IsNullOrWhiteSpace(order))
+//            {
+//                retval.Error = "Order object is required.";
+//                return Json(retval, _requestBehavior);
+//            }
+//
+//            try
+//            {
+//                string error = String.Empty;
+//                var db = new DataAccess();
+//                var canAccess = db.CanAccess(accessKey, out error);
+//                retval.Error = error;
+//
+//                if(canAccess)
+//                {
+//                    var orderObj = (new JavaScriptSerializer()).Deserialize<Order>(order);
+//                    var api = new Shopify();
+//                    retval.Data = api.CreateOrder(orderObj);
+//
+//                    api.DeleteOrder(retval.Data.Id);
+//                }
+//            }
+//            catch(Exception ex)
+//            {
+//                retval.Error = ex.Message;
+//            }
+//
+//            return Json(retval, _requestBehavior);
+//        }
 
         public JsonResult GetPolicy()
         {
@@ -925,7 +953,7 @@ namespace CustomerAppBackend.Controllers
             return Json(retval, _requestBehavior);
         }
 
-        public JsonResult CalculateTaxes() 
+        public JsonResult CalculateTaxes(string accessKey, string countryCode, string provinceCode, decimal subtotal) 
         {
             var retval = new DataWrapper<List<TaxInfo>>()
                 {
@@ -934,19 +962,19 @@ namespace CustomerAppBackend.Controllers
                 };
 
 
-            if (Request["countryCode"] == null)
+            if (String.IsNullOrWhiteSpace(countryCode))
             {
                 retval.Error = "A country code is required to calculate taxes.";
                 return Json(retval, _requestBehavior);
             }
 
-            if (Request["provinceCode"] == null)
+            if (String.IsNullOrWhiteSpace(provinceCode))
             {
                 retval.Error = "A province code is required to calculate taxes.";
                 return Json(retval, _requestBehavior);
             }
 
-            if (Request["subtotal"] == null)
+            if (subtotal <= 0)
             {
                 retval.Error = "A subtotal is required to calculate taxes.";
                 return Json(retval, _requestBehavior);
@@ -956,17 +984,48 @@ namespace CustomerAppBackend.Controllers
             {
                 string error = String.Empty;
                 var db = new DataAccess();
-                var canAccess = db.CanAccess(Request["accessKey"], out error);
+                var canAccess = db.CanAccess(accessKey, out error);
                 retval.Error = error;
 
                 if(canAccess)
                 {
-                    var countryCode = Request["countryCode"];
-                    var provinceCode = Request["provinceCode"];
-                    var subtotal = Decimal.Parse(Request["subtotal"]);
-
                     var api = new Shopify();
                     retval.Data = api.CalculateTaxes(countryCode, provinceCode, subtotal);
+                }
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
+        public JsonResult GetShippingRates(string accessKey, string countryCode) 
+        {
+            var retval = new DataWrapper<List<ShippingRate>>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            if (String.IsNullOrWhiteSpace(countryCode))
+            {
+                retval.Error = "A country code is required to calculate taxes.";
+                return Json(retval, _requestBehavior);
+            }
+
+            try
+            {
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(accessKey, out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var api = new Shopify();
+                    retval.Data = api.GetShippingRates(countryCode);
                 }
             }
             catch(Exception ex)

@@ -121,6 +121,7 @@
     <Compile Include="DataObject\Credentials.cs" />
     <Compile Include="DataObject\Category.cs" />
     <Compile Include="DataObject\FulfillmentService.cs" />
+    <Compile Include="DataObject\ShippingRate.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />

@@ -57,6 +57,13 @@ namespace CustomerAppBackend.ShopInterface.Shopify
             return retval;
         }
 
+        public List<ShippingRate> GetShippingRates(string countryCode)
+        {
+            var path = "/admin/countries.json";
+            var country = this.Get<CountryInfo>(path).FirstOrDefault(x => x.Code == countryCode);
+            return country.ShippingRates;
+        }
+
         public Customer GetCustomer(string email)
         {
             var path = "/admin/customers/search.json";
@@ -136,7 +143,7 @@ namespace CustomerAppBackend.ShopInterface.Shopify
 
         public Order GetOrder(int id)
         {
-            var path = String.Format("/admin/orders/#{0}.json", id);
+            var path = String.Format("/admin/orders/{0}.json", id);
             var retval = this.Get<Order>(path).FirstOrDefault();
             return retval;
         }

@@ -8,19 +8,9 @@ using CustomerAppBackend.ShopInterface;
 
 namespace CustomerAppBackend.DataObject
 {
-    public class CountryInfo : IShopify
+    public class ShippingRate : IShopify
     {
-        public CountryInfo()
-        {
-        }
-
-        public CountryInfo(IDictionary data)
-            : this()
-        {
-            this.LoadFromShopifyObject(data);
-        }
-
-        public string Code
+        public int Id
         {
             get;
             set;
@@ -32,30 +22,28 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public List<ProvinceInfo> Provinces
+        public decimal Price
         {
             get;
             set;
         }
 
-        public List<ShippingRate> ShippingRates
+        public decimal MaxWeight
         {
             get;
             set;
         }
 
-        public decimal Tax
+        public decimal MinWeight
         {
             get;
             set;
         }
 
-        public string TaxName
+        public ShippingRate()
         {
-            get;
-            set;
         }
-            
+
         #region IShopify implementation
 
         public string ToShopifyJson()
@@ -65,12 +53,11 @@ namespace CustomerAppBackend.DataObject
 
         public void LoadFromShopifyObject(IDictionary data)
         {
-            this.Code = data["code"] as String;
+            this.Id = (int)data["id"];
             this.Name = data["name"] as String;
-            this.Provinces = ShopInterfaceBase.Transform<ProvinceInfo>(data["provinces"]);
-            this.ShippingRates = ShopInterfaceBase.Transform<ShippingRate>(data["weight_based_shipping_rates"]);
-            this.Tax = (decimal)data["tax"];
-            this.TaxName = data["tax_name"] as String;
+            this.Price = Decimal.Parse(data["price"] as String);
+            this.MaxWeight = (decimal)data["weight_high"];
+            this.MinWeight = (decimal)data["weight_low"];
         }
 
         #endregion
