@@ -196,6 +196,16 @@ namespace CustomerAppBackend.ShopInterface.Shopify
             return retval;
         }
 
+        public List<Product> SearchProducts(string text)
+        {
+            var products = this.GetProducts();
+            var retval = products.Where(x => x.Description.Contains(text) || x.Name.Contains(text) ||
+                             x.Tags.Contains(text) || x.Title.Contains(text) ||
+                             x.Vendor.Contains(text)).ToList();
+
+            return retval;
+        }
+
         public Policy GetPolicy()
         {
             var path = "/admin/policies.json";

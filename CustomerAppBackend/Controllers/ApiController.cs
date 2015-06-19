@@ -953,6 +953,41 @@ namespace CustomerAppBackend.Controllers
             return Json(retval, _requestBehavior);
         }
 
+        public JsonResult SearchProducts(string accessKey, string text) 
+        {
+            var retval = new DataWrapper<List<Product>>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            if (String.IsNullOrWhiteSpace(text))
+            {
+                retval.Error = "Invalid Product Id";
+                return Json(retval, _requestBehavior);
+            }
+
+            try
+            {
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(accessKey, out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var api = new Shopify();
+                    retval.Data = api.SearchProducts(text);
+                }
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
         public JsonResult CalculateTaxes(string accessKey, string countryCode, string provinceCode, decimal subtotal) 
         {
             var retval = new DataWrapper<List<TaxInfo>>()
