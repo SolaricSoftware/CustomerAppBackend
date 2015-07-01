@@ -686,9 +686,9 @@ namespace CustomerAppBackend.Controllers
 //            return Json(retval, _requestBehavior);
 //        }
 
-        public JsonResult GetPolicy()
+        public JsonResult GetPolicies(string accessKey)
         {
-            var retval = new DataWrapper<Policy>()
+            var retval = new DataWrapper<List<Policy>>()
                 {
                     Error = String.Empty,
                     Data = null
@@ -696,14 +696,22 @@ namespace CustomerAppBackend.Controllers
 
             try
             {
-                var api = new Shopify();
-                retval.Data = api.GetPolicy();
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(accessKey, out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var api = new Shopify();
+                    retval.Data = api.GetPolicies();
+                }
             }
             catch(Exception ex)
             {
                 retval.Error = ex.Message;
             }
-
+               
             return Json(retval, _requestBehavior);
         }
 

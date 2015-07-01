@@ -206,10 +206,10 @@ namespace CustomerAppBackend.ShopInterface.Shopify
             return retval;
         }
 
-        public Policy GetPolicy()
+        public List<Policy> GetPolicies()
         {
             var path = "/admin/policies.json";
-            var retval = this.Get<Policy>(path).FirstOrDefault();
+            var retval = this.Get<Policy>(path);
             return retval;
         }
 
