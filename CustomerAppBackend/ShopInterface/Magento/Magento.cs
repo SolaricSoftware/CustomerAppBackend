@@ -39,6 +39,35 @@ namespace CustomerAppBackend.ShopInterface.Magento
             return retval;
         }
 
+		public List<Product> GetProducts()
+		{
+			var products = this._client.catalogProductList (this._sessionId, null, null);
+
+			var retval = new List<Product>();
+			foreach (var product in products) 
+			{
+				var p = new Product {
+					Id = Int32.Parse(product.product_id),
+					Name = product.name,
+					Title = product.name
+				};
+
+				var images = this._client.catalogProductAttributeMediaList (this._sessionId, p.Id.ToString (), null, null);
+				foreach (var img in images) {
+					var pi = new ProductImage {
+						Position = Int32.Parse(img.position),
+						ProductId = p.Id,
+						Source = img.url
+					};
+
+					p.Images.Add(pi);
+				}
+
+				retval.Add (p);
+			}
+			return retval;
+		}
+
         private List<Category> ConvertToCategories(catalogCategoryEntity entity)
         {
             var retval = new List<Category>();

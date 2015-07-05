@@ -12,6 +12,7 @@ namespace CustomerAppBackend.DataObject
     {
         public Product()
         {
+			this.Images = new List<ProductImage> ();
         }
 
         public Product(IDictionary data)

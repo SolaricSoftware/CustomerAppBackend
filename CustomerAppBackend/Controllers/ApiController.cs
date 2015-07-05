@@ -788,27 +788,38 @@ namespace CustomerAppBackend.Controllers
             return Json(retval, _requestBehavior);
         }
 
-        public JsonResult GetProducts()
+		public JsonResult GetProducts(string accessKey, string ids = null)
         {
             var retval = new DataWrapper<List<Product>>()
                 {
                     Error = String.Empty,
                     Data = null
                 };
-                        
-            try
-            {
-                var api = new Shopify();
+                    
+			try
+			{
+				string error = String.Empty;
+				var db = new DataAccess();
+				var canAccess = db.CanAccess(accessKey, out error);
+				retval.Error = error;
 
-                if(Request["ids"] == null)
-                    retval.Data = api.GetProducts();
-                else
-                    retval.Data = api.GetProducts(Request["ids"]);
-            }
-            catch(Exception ex)
-            {
-                retval.Error = ex.Message;
-            }
+				if(canAccess)
+				{
+//					var api = new Shopify();
+//
+//					if(ids == null)
+//						retval.Data = api.GetProducts();
+//					else
+//						retval.Data = api.GetProducts(ids);
+
+					var api = new MagentoClient();
+					retval.Data = api.GetProducts();
+				}
+			}
+			catch(Exception ex)
+			{
+				retval.Error = ex.Message;
+			}
 
             return Json(retval, _requestBehavior);
         }
