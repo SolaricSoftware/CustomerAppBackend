@@ -12,6 +12,7 @@ namespace CustomerAppBackend
     {
         public Category()
         {
+            this.Children = new List<Category>();
         }
 
         public Category(IDictionary data)
@@ -21,6 +22,12 @@ namespace CustomerAppBackend
         }
 
         public int Id
+        {
+            get;
+            set;
+        }
+
+        public int ParentId
         {
             get;
             set;
@@ -57,6 +64,12 @@ namespace CustomerAppBackend
         }
 
         public bool Visible
+        {
+            get;
+            set;
+        }
+
+        public List<Category> Children
         {
             get;
             set;

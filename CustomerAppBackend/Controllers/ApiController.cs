@@ -11,6 +11,7 @@ using System.Web.Script.Serialization;
 using CustomerAppBackend.Data;
 using CustomerAppBackend.DataObject;
 using CustomerAppBackend.ShopInterface.Shopify;
+using CustomerAppBackend.ShopInterface.Magento;
 
 namespace CustomerAppBackend.Controllers
 {
@@ -775,7 +776,8 @@ namespace CustomerAppBackend.Controllers
 
             try
             {
-                var api = new Shopify();
+                //var api = new Shopify();
+                var api = new MagentoClient();
                 retval.Data = api.GetCategories();
             }
             catch(Exception ex)

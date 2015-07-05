@@ -74,6 +74,7 @@
     <Folder Include="Views\Api\" />
     <Folder Include="ShopInterface\" />
     <Folder Include="ShopInterface\Shopify\" />
+    <Folder Include="ShopInterface\Magento\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\HomeController.cs" />
@@ -122,6 +123,10 @@
     <Compile Include="DataObject\Category.cs" />
     <Compile Include="DataObject\FulfillmentService.cs" />
     <Compile Include="DataObject\ShippingRate.cs" />
+    <Compile Include="ShopInterface\Magento\Magento.cs" />
+    <Compile Include="Web References\Magento\Reference.cs">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />
@@ -142,4 +147,22 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
+  <ItemGroup>
+    <WebReferences Include="Web References" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="http://www.solaricsoftware.com/magento/index.php/api/v2_soap/?wsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\Magento</RelPath>
+      <UpdateFromURL>http://www.solaricsoftware.com/magento/index.php/api/v2_soap/?wsdl</UpdateFromURL>
+    </WebReferenceUrl>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web References\Magento\.wsdl" />
+    <None Include="Web References\Magento\.xsd" />
+    <None Include="Web References\Magento\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
 </Project>
