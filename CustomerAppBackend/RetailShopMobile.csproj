@@ -94,7 +94,6 @@
     <Compile Include="DataObject\AppCustomerItemCategoryDao.cs" />
     <Compile Include="DataObject\Customer.cs" />
     <Compile Include="DataObject\Address.cs" />
-    <Compile Include="ShopInterface\Shopify\Shopify.cs" />
     <Compile Include="ShopInterface\IShopify.cs" />
     <Compile Include="ShopInterface\ShopInterfaceBase.cs" />
     <Compile Include="DataObject\Order.cs" />
@@ -123,10 +122,11 @@
     <Compile Include="DataObject\Category.cs" />
     <Compile Include="DataObject\FulfillmentService.cs" />
     <Compile Include="DataObject\ShippingRate.cs" />
-    <Compile Include="ShopInterface\Magento\Magento.cs" />
     <Compile Include="Web References\Magento\Reference.cs">
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <Compile Include="ShopInterface\Magento\MagentoClient.cs" />
+    <Compile Include="ShopInterface\Shopify\ShopifyClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />

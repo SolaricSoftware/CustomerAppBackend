@@ -58,7 +58,7 @@ namespace CustomerAppBackend.Controllers
 
                 if(canAccess)
                 {
-                    var api = new Shopify();
+                    var api = new ShopifyClient();
                     var customer = api.GetCustomer(username);
 
                     if (customer != null)
@@ -228,7 +228,7 @@ namespace CustomerAppBackend.Controllers
             try
             {
                 var data = Request["customer"];
-                var api = new Shopify();
+                var api = new ShopifyClient();
                 retval.Data = api.CreateCustomer(data).FirstOrDefault();
             }
             catch(Exception ex)
@@ -255,7 +255,7 @@ namespace CustomerAppBackend.Controllers
             {
                 try
                 {
-                    var api = new Shopify();
+                    var api = new ShopifyClient();
                     retval.Data = api.GetCustomer(email);
                 }
                 catch (Exception ex)
@@ -290,7 +290,7 @@ namespace CustomerAppBackend.Controllers
 
                 if(canAccess)
                 {
-                    var api = new Shopify();
+                    var api = new ShopifyClient();
                     retval.Data = api.GetAddresses(customerId);
                 }
             }
@@ -331,7 +331,7 @@ namespace CustomerAppBackend.Controllers
 
                 if(canAccess)
                 {
-                    var api = new Shopify();
+                    var api = new ShopifyClient();
                     retval.Data = api.GetAddress(customerId, addressId);
                 }
             }
@@ -374,7 +374,7 @@ namespace CustomerAppBackend.Controllers
                 if(canAccess)
                 {
                     var obj = (new JavaScriptSerializer()).Deserialize<Address>(address);
-                    var api = new Shopify();
+                    var api = new ShopifyClient();
                     retval.Data = api.AddAddress(customerId, obj);
                 }
             }
@@ -417,7 +417,7 @@ namespace CustomerAppBackend.Controllers
                 if(canAccess)
                 {
                     var obj = (new JavaScriptSerializer()).Deserialize<Address>(address);
-                    var api = new Shopify();
+                    var api = new ShopifyClient();
                     retval.Data = api.UpdateAddress(customerId, obj);
                 }
             }
@@ -458,7 +458,7 @@ namespace CustomerAppBackend.Controllers
 
                 if(canAccess)
                 {
-                    var api = new Shopify();
+                    var api = new ShopifyClient();
                     api.DeleteAddress(customerId, addressId);
                     retval.Data = true;
                 }
@@ -500,7 +500,7 @@ namespace CustomerAppBackend.Controllers
 
                 if(canAccess)
                 {
-                    var api = new Shopify();
+                    var api = new ShopifyClient();
                     retval.Data = api.SetDefaultAddress(customerId, addressId);
                 }
             }
@@ -529,7 +529,7 @@ namespace CustomerAppBackend.Controllers
 
                 if(canAccess)
                 {
-                    var api = new Shopify();
+                    var api = new ShopifyClient();
                     retval.Data = api.GetFulfillmentServices();
                 }
             }
@@ -564,7 +564,7 @@ namespace CustomerAppBackend.Controllers
 
                 if(canAccess)
                 {
-                    var api = new Shopify();
+                    var api = new ShopifyClient();
                     retval.Data = api.GetOrders(customerId);
                 }
             }
@@ -599,7 +599,7 @@ namespace CustomerAppBackend.Controllers
 
                 if(canAccess)
                 {
-                    var api = new Shopify();
+                    var api = new ShopifyClient();
                     retval.Data = api.GetOrder(orderId);
                 }
             }
@@ -636,7 +636,7 @@ namespace CustomerAppBackend.Controllers
                 if(canAccess)
                 {
                     var orderObj = (new JavaScriptSerializer()).Deserialize<Order>(order);
-                    var api = new Shopify();
+                    var api = new ShopifyClient();
                     retval.Data = api.CreateOrder(orderObj);
                 }
             }
@@ -704,7 +704,7 @@ namespace CustomerAppBackend.Controllers
 
                 if(canAccess)
                 {
-                    var api = new Shopify();
+                    var api = new ShopifyClient();
                     retval.Data = api.GetPolicies();
                 }
             }
@@ -726,7 +726,7 @@ namespace CustomerAppBackend.Controllers
 
             try
             {
-                var api = new Shopify();
+                var api = new ShopifyClient();
                 retval.Data = api.GetLocations();
             }
             catch(Exception ex)
@@ -754,7 +754,7 @@ namespace CustomerAppBackend.Controllers
 
                 if(canAccess)
                 {
-                    var api = new Shopify();
+                    var api = new ShopifyClient();
                     retval.Data = api.GetLocation(locationId);
                 }
             }
@@ -805,14 +805,14 @@ namespace CustomerAppBackend.Controllers
 
 				if(canAccess)
 				{
-//					var api = new Shopify();
-//
-//					if(ids == null)
-//						retval.Data = api.GetProducts();
-//					else
-//						retval.Data = api.GetProducts(ids);
-
+					//var api = new Shopify();
 					var api = new MagentoClient();
+
+					if(ids == null)
+						retval.Data = api.GetProducts();
+					else
+						retval.Data = api.GetProducts(ids);
+
 					retval.Data = api.GetProducts();
 				}
 			}
@@ -824,7 +824,7 @@ namespace CustomerAppBackend.Controllers
             return Json(retval, _requestBehavior);
         }
 
-        public JsonResult GetProduct()
+		public JsonResult GetProduct(string accessKey, int productId)
         {
             var retval = new DataWrapper<Product>()
                 {
@@ -836,13 +836,12 @@ namespace CustomerAppBackend.Controllers
             {
                 string error = String.Empty;
                 var db = new DataAccess();
-                var canAccess = db.CanAccess(Request["accessKey"], out error);
+                var canAccess = db.CanAccess(accessKey, out error);
                 retval.Error = error;
 
                 if(canAccess)
                 {
-                    var productId = Int32.Parse(Request["productId"]);
-                    var api = new Shopify();
+                    var api = new ShopifyClient();
                     retval.Data = api.GetProduct(productId);
                 }
             }
@@ -870,8 +869,9 @@ namespace CustomerAppBackend.Controllers
 
             try
             {
-                var api = new Shopify();
-                retval.Data = api.GetProductsByCategoryId(Request["categoryId"]);
+                //var api = new Shopify();
+				var api = new MagentoClient();
+				retval.Data = api.GetProductsByCategoryId(categoryId.ToString());
             }
             catch(Exception ex)
             {
@@ -904,7 +904,7 @@ namespace CustomerAppBackend.Controllers
 
                 if(canAccess)
                 {
-                    var api = new Shopify();
+                    var api = new ShopifyClient();
                     retval.Data = api.GetProductImages(productId);
                 }
             }
@@ -939,7 +939,7 @@ namespace CustomerAppBackend.Controllers
 
                 if(canAccess)
                 {
-                    var api = new Shopify();
+                    var api = new ShopifyClient();
                     retval.Data = api.GetProductImages(productId).OrderBy(x => x.Position).FirstOrDefault();
                 }
             }
@@ -963,7 +963,7 @@ namespace CustomerAppBackend.Controllers
             {
                 //TODO: Get freatured categoy name from database if one is availabe.
 
-                var api = new Shopify();
+                var api = new ShopifyClient();
                 retval.Data = api.GetFeaturedProducts();
             }
             catch(Exception ex)
@@ -997,7 +997,7 @@ namespace CustomerAppBackend.Controllers
 
                 if(canAccess)
                 {
-                    var api = new Shopify();
+                    var api = new ShopifyClient();
                     retval.Data = api.SearchProducts(text);
                 }
             }
@@ -1045,7 +1045,7 @@ namespace CustomerAppBackend.Controllers
 
                 if(canAccess)
                 {
-                    var api = new Shopify();
+                    var api = new ShopifyClient();
                     retval.Data = api.CalculateTaxes(countryCode, provinceCode, subtotal);
                 }
             }
@@ -1080,7 +1080,7 @@ namespace CustomerAppBackend.Controllers
 
                 if(canAccess)
                 {
-                    var api = new Shopify();
+                    var api = new ShopifyClient();
                     retval.Data = api.GetShippingRates(countryCode);
                 }
             }

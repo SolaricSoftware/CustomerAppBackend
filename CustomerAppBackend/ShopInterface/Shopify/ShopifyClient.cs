@@ -13,13 +13,13 @@ using CustomerAppBackend.ShopInterface;
 
 namespace CustomerAppBackend.ShopInterface.Shopify
 {
-    public class Shopify : ShopInterfaceBase
+    public class ShopifyClient : ShopInterfaceBase
     {
         private string _apiKey = "8037a4e7d88990e51606487d2faee5e8";
         private string _password = "7460df937d2be2ce09c69b29ce3a19b9";
         private string _shopName = "customerappteststore";
 
-        public Shopify()
+        public ShopifyClient()
         {
         }
 
