@@ -10,6 +10,7 @@ using System.Web.Script.Serialization;
 
 using CustomerAppBackend.Data;
 using CustomerAppBackend.DataObject;
+using CustomerAppBackend.ShopInterface;
 using CustomerAppBackend.ShopInterface.Shopify;
 using CustomerAppBackend.ShopInterface.Magento;
 
@@ -58,8 +59,9 @@ namespace CustomerAppBackend.Controllers
 
                 if(canAccess)
                 {
-                    var api = new ShopifyClient();
-                    var customer = api.GetCustomer(username);
+                    //var api = new ShopifyClient();
+                    var api = new MagentoClient();
+                    var customer = api.GetCustomer(username, password);
 
                     if (customer != null)
                     {
@@ -217,7 +219,7 @@ namespace CustomerAppBackend.Controllers
 //        }
 
         [HttpPost]
-        public JsonResult CreateCustomer()
+        public JsonResult CreateCustomer(string accessKey, string customer)
         {
             var retval = new DataWrapper<Customer>()
                 {
@@ -225,11 +227,24 @@ namespace CustomerAppBackend.Controllers
                     Data = null
                 };
 
+            if (String.IsNullOrWhiteSpace(customer))
+            {
+                retval.Error = "Customer object is required.";
+                return Json(retval, _requestBehavior);
+            }
+
             try
             {
-                var data = Request["customer"];
-                var api = new ShopifyClient();
-                retval.Data = api.CreateCustomer(data).FirstOrDefault();
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(accessKey, out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var api = new ShopifyClient();
+                    retval.Data = api.CreateCustomer(customer).FirstOrDefault();
+                }
             }
             catch(Exception ex)
             {
@@ -256,7 +271,7 @@ namespace CustomerAppBackend.Controllers
                 try
                 {
                     var api = new ShopifyClient();
-                    retval.Data = api.GetCustomer(email);
+                    retval.Data = api.GetCustomer(email, null);
                 }
                 catch (Exception ex)
                 {
@@ -599,7 +614,8 @@ namespace CustomerAppBackend.Controllers
 
                 if(canAccess)
                 {
-                    var api = new ShopifyClient();
+//                    var api = new ShopifyClient();
+                    var api = new MagentoClient();
                     retval.Data = api.GetOrder(orderId);
                 }
             }
@@ -643,6 +659,11 @@ namespace CustomerAppBackend.Controllers
             catch(Exception ex)
             {
                 retval.Error = ex.Message;
+
+                if (ex.InnerException != null)
+                {
+                    retval.Error += " - " + ex.InnerException;
+                }
             }
 
             return Json(retval, _requestBehavior);
@@ -776,7 +797,7 @@ namespace CustomerAppBackend.Controllers
 
             try
             {
-                //var api = new Shopify();
+                //var api = new ShopifyClient();
                 var api = new MagentoClient();
                 retval.Data = api.GetCategories();
             }
@@ -805,7 +826,7 @@ namespace CustomerAppBackend.Controllers
 
 				if(canAccess)
 				{
-					//var api = new Shopify();
+					//var api = new ShopifyClient();
 					var api = new MagentoClient();
 
 					if(ids == null)
@@ -841,8 +862,9 @@ namespace CustomerAppBackend.Controllers
 
                 if(canAccess)
                 {
-                    var api = new ShopifyClient();
-                    retval.Data = api.GetProduct(productId);
+                    //var api = new ShopifyClient();
+                    var api = new MagentoClient();
+                    retval.Data = api.GetProduct(productId.ToString());
                 }
             }
             catch(Exception ex)
@@ -853,14 +875,14 @@ namespace CustomerAppBackend.Controllers
             return Json(retval, _requestBehavior);
         }
 
-        public JsonResult GetProductsByCategoryId(int categoryId)
+        public JsonResult GetProductsByCategoryId(string accessKey, int categoryId)
         {
             var retval = new DataWrapper<List<Product>>()
                 {
                     Error = String.Empty,
                     Data = null
                 };
-
+                        
             if (categoryId == 0)
             {
                 retval.Error = "Category Id is missing or invalid.";
@@ -869,9 +891,17 @@ namespace CustomerAppBackend.Controllers
 
             try
             {
-                //var api = new Shopify();
-				var api = new MagentoClient();
-				retval.Data = api.GetProductsByCategoryId(categoryId.ToString());
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(accessKey, out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    //var api = new ShopifyClient();
+                    var api = new MagentoClient();
+                    retval.Data = api.GetProductsByCategoryId(categoryId.ToString());
+                }
             }
             catch(Exception ex)
             {
@@ -1082,6 +1112,230 @@ namespace CustomerAppBackend.Controllers
                 {
                     var api = new ShopifyClient();
                     retval.Data = api.GetShippingRates(countryCode);
+                }
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
+        public JsonResult CreateCart(string accessKey, int customerId)
+        {
+            var retval = new DataWrapper<int>()
+                {
+                    Error = String.Empty,
+                    Data = 0
+                };
+
+            if (customerId <= 0)
+            {
+                retval.Error = "Invalid Customer Id";
+                return Json(retval, _requestBehavior);
+            }
+
+            try
+            {
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(accessKey, out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var api = new MagentoClient();
+                    retval.Data = api.CreateCart(customerId);
+                }
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
+        public JsonResult GetCart(string accessKey, int cartId)
+        {
+            var retval = new DataWrapper<Cart>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            if (cartId <= 0)
+            {
+                retval.Error = "Invalid Cart Id";
+                return Json(retval, _requestBehavior);
+            }
+
+            try
+            {
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(accessKey, out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var api = new MagentoClient();
+                    retval.Data = api.GetCart(cartId);
+                }
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
+        public JsonResult AddToCart(string accessKey, int cartId, string cartItems)
+        {
+            var retval = new DataWrapper<bool>()
+                {
+                    Error = String.Empty,
+                    Data = false
+                };
+
+            if (String.IsNullOrWhiteSpace(cartItems))
+            {
+                retval.Error = "CartItems object is required.";
+                return Json(retval, _requestBehavior);
+            }
+
+            try
+            {
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(accessKey, out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var cartItemsObj = (new JavaScriptSerializer()).Deserialize<List<CartItem>>(cartItems);
+                    var api = new MagentoClient();
+                    retval.Data = api.AddToCart(cartId, cartItemsObj);
+                }
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
+        public JsonResult AddPaymentMethodToCart(string accessKey, int cartId, string payment)
+        {
+            var retval = new DataWrapper<bool>()
+                {
+                    Error = String.Empty,
+                    Data = false
+                };
+
+            if (String.IsNullOrWhiteSpace(payment))
+            {
+                retval.Error = "Payment object is required.";
+                return Json(retval, _requestBehavior);
+            }
+
+            try
+            {
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(accessKey, out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var paymentObj = (new JavaScriptSerializer()).Deserialize<Payment>(payment);
+                    var api = new MagentoClient();
+                    retval.Data = api.AddPaymentMethodToCart(cartId, paymentObj);
+                }
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
+        public JsonResult AddAddressToCart(string accessKey, int cartId, int addressId, int addressType)
+        {
+            var retval = new DataWrapper<bool>()
+                {
+                    Error = String.Empty,
+                    Data = false
+                };
+
+            if (cartId <= 0)
+            {
+                retval.Error = "Invalid Cart Id";
+                return Json(retval, _requestBehavior);
+            }
+
+            if (addressId <= 0)
+            {
+                retval.Error = "Invalid Address Id";
+                return Json(retval, _requestBehavior);
+            }
+
+            if (addressType <= 0 && addressType >= 3)
+            {
+                retval.Error = "Invalid Address Type Id";
+                return Json(retval, _requestBehavior);
+            }
+
+            try
+            {
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(accessKey, out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var api = new MagentoClient();
+                    retval.Data = api.AddAddressToCart(cartId, addressId, (AddressType)addressType);
+                }
+            }
+            catch(Exception ex)
+            {
+                retval.Error = ex.Message;
+            }
+
+            return Json(retval, _requestBehavior);
+        }
+
+        public JsonResult PlaceOrder(string accessKey, int cartId)
+        {
+            var retval = new DataWrapper<string>()
+                {
+                    Error = String.Empty,
+                    Data = null
+                };
+
+            if (cartId <= 0)
+            {
+                retval.Error = "Invalid Cart Id";
+                return Json(retval, _requestBehavior);
+            }
+
+            try
+            {
+                string error = String.Empty;
+                var db = new DataAccess();
+                var canAccess = db.CanAccess(accessKey, out error);
+                retval.Error = error;
+
+                if(canAccess)
+                {
+                    var api = new MagentoClient();
+                    retval.Data = api.PlaceOrder(cartId);
                 }
             }
             catch(Exception ex)

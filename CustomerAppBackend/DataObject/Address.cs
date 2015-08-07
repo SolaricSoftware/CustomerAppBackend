@@ -104,7 +104,19 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public bool Default
+        public bool DefaultBilling
+        {
+            get;
+            set;
+        }
+
+        public bool DefaultShipping
+        {
+            get;
+            set;
+        }
+
+        public AddressType AddressType
         {
             get;
             set;
@@ -153,7 +165,7 @@ namespace CustomerAppBackend.DataObject
             this.Name = data["name"] as String;
 
             if (data["default"] != null)
-                this.Default = (bool)data["default"];
+                this.DefaultBilling = (bool)data["default"];
         }
     }
 }

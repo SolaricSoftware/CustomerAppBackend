@@ -64,19 +64,19 @@ namespace CustomerAppBackend.ShopInterface.Shopify
             return country.ShippingRates;
         }
 
-        public Customer GetCustomer(string email)
+        public Customer GetCustomer(string email, string password)
         {
             var path = "/admin/customers/search.json";
             var retval = this.Get<Customer>(path, String.Format("query= email:{0}", email)).FirstOrDefault();
             return retval;
         }
 
-        public Customer GetCustomer(int id)
-        {
-            var path= String.Format("/admin/customers/#{0}.json", id);
-            var retval = this.Get<Customer>(path).FirstOrDefault();
-            return retval;
-        }
+//        public Customer GetCustomer(int id)
+//        {
+//            var path= String.Format("/admin/customers/#{0}.json", id);
+//            var retval = this.Get<Customer>(path).FirstOrDefault();
+//            return retval;
+//        }
 
         public List<Customer> CreateCustomer(string data)
         {
@@ -182,7 +182,7 @@ namespace CustomerAppBackend.ShopInterface.Shopify
             return retval;
         }
 
-        public Product GetProduct(int id)
+        public Product GetProduct(string id)
         {
             var path = String.Format("/admin/products/{0}.json", id);
             var retval = this.Get<Product>(path).FirstOrDefault();

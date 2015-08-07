@@ -6,6 +6,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace CustomerAppBackend.ShopInterface
 {
@@ -17,7 +19,14 @@ namespace CustomerAppBackend.ShopInterface
         DELETE
     }
 
-    public enum FinancialStatusType
+    public enum AddressType
+    {
+        NotSet,
+        Shipping,
+        Billing
+    }
+
+    public enum PaymentStatusType
     {
         Unknown,
         Pending,
@@ -43,7 +52,14 @@ namespace CustomerAppBackend.ShopInterface
     {
         Null,
         Fulfilled,
-        Partial
+        Partial,
+        Pending_Payment,
+        Complete,
+        New,
+        Processing,
+        Closed,
+        Canceled,
+        Hold
     }
 
     public enum CancelReasonType
@@ -143,6 +159,34 @@ namespace CustomerAppBackend.ShopInterface
                 }
             }
 
+            return retval;
+        }
+
+        protected bool ValidateHash(string password, string hash)
+        {
+            var hashArr = hash.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var retval = false;
+            switch (hashArr.Length)
+            {
+                case 1:
+                    var hashedString = GenerateHash(password, "");
+                    retval = hashedString == hash;
+                    break;
+                case 2:
+                    var saltedHash = GenerateHash(password, hashArr[1]);
+                    retval = saltedHash == hashArr[0];
+                    break;
+            }
+
+            return retval;
+        }
+
+        protected string GenerateHash(string value, string salt)
+        {
+            byte[] data = ASCIIEncoding.Default.GetBytes(salt + value);
+            data = MD5.Create().ComputeHash(data);
+            var retval = BitConverter.ToString(data).Replace("-", "").ToLower();
             return retval;
         }
 

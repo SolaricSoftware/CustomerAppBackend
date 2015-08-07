@@ -93,7 +93,7 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public FinancialStatusType FinancialStatus
+        public PaymentStatusType PaymentStatus
         {
             get;
             set;
@@ -201,12 +201,6 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public decimal TotalLineItemPrice
-        {
-            get;
-            set;
-        }
-
         public decimal TotalPrice {
             get;
             set;
@@ -218,7 +212,7 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public int TotalWeight
+        public decimal TotalWeight
         {
             get;
             set;
@@ -255,8 +249,8 @@ namespace CustomerAppBackend.DataObject
             if (!String.IsNullOrWhiteSpace(this.Currency))
                 data.order.currency = this.Currency;
 
-            if (this.FinancialStatus != FinancialStatusType.Unknown)
-                data.order.financial_status = this.FinancialStatus.ToString().ToLower();
+            if (this.PaymentStatus != PaymentStatusType.Unknown)
+                data.order.financial_status = this.PaymentStatus.ToString().ToLower();
 
             if (this.Customer != null)
                 data.order.customer = this.Customer.ToShopifyJson();
@@ -299,10 +293,9 @@ namespace CustomerAppBackend.DataObject
             this.TaxesIncluded = (bool)data["taxes_included"];
             this.Token = data["token"] as String;
             this.TotalDiscount = Decimal.Parse(data["total_discounts"] as String);
-            this.TotalLineItemPrice = Decimal.Parse(data["total_line_items_price"] as String);
             this.TotalPrice = Decimal.Parse(data["total_price"] as String);
             this.TotalTax = Decimal.Parse(data["total_tax"] as String);
-            this.TotalWeight = (int)data["total_weight"];
+            this.TotalWeight = Decimal.Parse(data["total_weight"] as String);
             this.UpdatedAt = DateTime.Parse(data["updated_at"] as String);
 
             if (data["shipping_address"] != null)
@@ -314,9 +307,9 @@ namespace CustomerAppBackend.DataObject
             Enum<SI.CancelReasonType>.TryParse(data["cancel_reason"] as String, out reason);
             this.CancelReason = reason;
 
-            SI.FinancialStatusType fstatus;
-            Enum<SI.FinancialStatusType>.TryParse(data["financial_status"] as String, out fstatus);
-            this.FinancialStatus = fstatus;
+            SI.PaymentStatusType fstatus;
+            Enum<SI.PaymentStatusType>.TryParse(data["financial_status"] as String, out fstatus);
+            this.PaymentStatus = fstatus;
 
             SI.OrderStatusType ostatus;
             Enum<SI.OrderStatusType>.TryParse(data["fulfillment_status"] as String, out ostatus);

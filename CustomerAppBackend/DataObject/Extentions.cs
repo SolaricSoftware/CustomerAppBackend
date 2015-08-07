@@ -248,7 +248,7 @@ namespace CustomerAppBackend.DataObject
 
         public static string ToShopifyJson<T>(this IEnumerable<T> items) where T : IShopify
         {
-            var itemCount = items.Count();
+            var itemCount = 0;
             var sb = new StringBuilder();
             sb.Append("[");
             foreach(var item in items)

@@ -13,7 +13,7 @@ namespace CustomerAppBackend.ShopInterface.Shopify
             return Enum<T>.Parse(text);  
         }
 
-        protected string ToString(FinancialStatusType item)
+        protected string ToString(PaymentStatusType item)
         {
             return item.ToString().ToLower();
         }

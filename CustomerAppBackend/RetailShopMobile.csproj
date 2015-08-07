@@ -95,7 +95,6 @@
     <Compile Include="DataObject\Customer.cs" />
     <Compile Include="DataObject\Address.cs" />
     <Compile Include="ShopInterface\IShopify.cs" />
-    <Compile Include="ShopInterface\ShopInterfaceBase.cs" />
     <Compile Include="DataObject\Order.cs" />
     <Compile Include="ShopInterface\Shopify\ShopifyBase.cs" />
     <Compile Include="ShopInterface\Enum.cs" />
@@ -127,6 +126,11 @@
     </Compile>
     <Compile Include="ShopInterface\Magento\MagentoClient.cs" />
     <Compile Include="ShopInterface\Shopify\ShopifyClient.cs" />
+    <Compile Include="DataObject\Cart.cs" />
+    <Compile Include="DataObject\CartItem.cs" />
+    <Compile Include="DataObject\PaymentInfo.cs" />
+    <Compile Include="DataObject\Payment.cs" />
+    <Compile Include="ShopInterface\ShopInterface.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />

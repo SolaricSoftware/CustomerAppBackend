@@ -58,7 +58,13 @@ namespace CustomerAppBackend.DataObject
             set;
         }
 
-        public int OrderCount
+        public int StoreId
+        {
+            get;
+            set;
+        }
+
+        public int WebsiteId
         {
             get;
             set;
@@ -112,7 +118,6 @@ namespace CustomerAppBackend.DataObject
             this.LastName = data["last_name"] as String;
             this.Email = data["email"] as String;
             this.Note = data["note"] as String;
-            this.OrderCount = (int)data["orders_count"];
             this.DefaultAddress = new Address(data["default_address"] as IDictionary);
             this.Addressess = ShopInterfaceBase.Transform<Address>(data["addresses"]);
         }   
